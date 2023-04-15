@@ -1,15 +1,19 @@
 Work packages:
 
 
--Create the blockchain (ie a way to have a series of blocks which are linked by hash and creating by mining
-  -Figure out a data structure to store blockchain, first thought is JSON. (data)
-  -Figure out a way to distribute the data to other nodes (networking)
-    -How to store node information?
-      -List of IPs to connect for first time, then the nodes need should send each other a list of IPs
+
+-Figure out a data structure to store blockchain, first thought is JSON. (data)
+-Figure out a way to distribute the data to other nodes (networking)
+  -How to store node information?
+    -List of IPs to connect for first time, then the nodes need should send each other a list of IPs
   -Develop mining algorithm (encryption)
 
 -Value aspect to blockchain
   -Generating public and private keys (encryption)
   -How to sign transactions so that the transaction is verifiable by anyone but only signable by private key holder (encryption, data)
+  -Transactions need to be sent to the mempool and queued up
   -How to broadcast the transaction to the network (networking)
    
+-Client
+  -Develop client to run off the command line
+  

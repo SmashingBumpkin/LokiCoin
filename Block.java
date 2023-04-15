@@ -45,12 +45,12 @@ public class Block {
     }
     
     public int blockNumber(){
-        //return jimmySaville;
         return this.blockNumber;
     }
 
     public String returnBlockPrintable(){
-        String output = "\n\n_________________\nBLOCK " + this.blockNumber + "\n\n" + this.data + "\n\n" + "Hash:\n" + this.hash;
+        String output = "__________\nBLOCK " + this.blockNumber + "\n\n"
+                         + this.data + "\n\n" + "Hash:\n" + this.hash + "\n__________";
         return output;
     }
     public String calculateBlockHash() {
@@ -89,8 +89,16 @@ public class Block {
         String prefixString = new String(new char[prefix]).replace('\0', '0');
         while (!hash.substring(0, prefix).equals(prefixString)) {
             nonce++;
+
+            //Nerfed mining algorithm, stops it from just wasting CPU power/levels playing field
+            try {
+                Thread.sleep(1);
+              } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+              }
             hash = calculateBlockHash();
         }
+        System.out.println("New block generated");
         return hash;
     }
 }

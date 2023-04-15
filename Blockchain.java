@@ -5,11 +5,12 @@ import java.util.List;
 
 public class Blockchain {
     public List<Block> blockchain = new ArrayList<>();
-    public int prefix = 4;
+    public int prefix = 2;
     public String prefixString;
     
 
-    public Blockchain() {
+    public Blockchain(int prefix) {
+        this.prefix = prefix;
         this.prefixString = new String(new char[prefix]).replace('\0', '0');
     }
 
@@ -19,26 +20,33 @@ public class Blockchain {
         }
     }
 
-    public void givenBlockchain_whenNewBlockAdded_thenSuccess() {
+    public void mineNewBlock(String data) {
         Block newBlock = new Block(
-            "The is a New Block.", 
+            data, 
             blockchain.get(blockchain.size() - 1).getHash(),
             new Date().getTime());
 
         newBlock.mineBlock(prefix);
-        //assertTrue(newBlock.getHash().substring(0, prefix).equals(prefixString));
         blockchain.add(newBlock);
     }
 
-    // public void givenBlockchain_whenValidated_thenSuccess() {
-    //     boolean flag = true;
-    //     for (int i = 0; i < blockchain.size(); i++) {
-    //         String previousHash = i==0 ? "0" : blockchain.get(i - 1).getHash();
-    //         flag = blockchain.get(i).getHash().equals(blockchain.get(i).calculateBlockHash())
-    //         && previousHash.equals(blockchain.get(i).getPreviousHash())
-    //         && blockchain.get(i).getHash().substring(0, prefix).equals(prefixString);
-    //             if (!flag) break;
-    //     }
-    //     //assertTrue(flag);
-    // }
+    public void validateBlockchain() {
+        boolean flag = true;
+        int errorBlock = 0;
+        for (int i = 0; i < blockchain.size(); i++) {
+            String previousHash = i==0 ? "0" : blockchain.get(i - 1).getHash();
+            flag = blockchain.get(i).getHash().equals(blockchain.get(i).calculateBlockHash())
+            && previousHash.equals(blockchain.get(i).getPreviousHash())
+            && blockchain.get(i).getHash().substring(0, prefix).equals(prefixString);
+            if (!flag){
+                errorBlock = i;
+                break;
+            } 
+        }
+        if (flag){
+            System.out.println("_____\nValid blockchain");
+        } else {
+            System.out.println("_____\nERROR: Invalid blockchain. Error in Block " + errorBlock);
+        }
+    }
 }
