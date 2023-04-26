@@ -1,4 +1,3 @@
-
 //All these imports need to be properly understood
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -21,6 +20,11 @@ public class Block {
         this.hash = calculateBlockHash();
         Block.longestChain++;
         this.blockNumber = Block.longestChain;
+    }
+
+    public Boolean validateBlock(){
+        //checks if a block and it's contents are valid
+        return false;
     }
 
     public String getHash() {
@@ -53,6 +57,7 @@ public class Block {
                          + this.data + "\n\n" + "Hash:\n" + this.hash + "\n__________";
         return output;
     }
+
     public String calculateBlockHash() {
         String dataToHash = previousHash 
         + Long.toString(timeStamp) 
@@ -99,6 +104,12 @@ public class Block {
             hash = calculateBlockHash();
         }
         System.out.println("New block generated");
+        this.broadcastBlock();
         return hash;
+    }
+
+    public void broadcastBlock(){
+        //Broadcasts the newly mined block to the blockchain
+        System.out.println("Broadcasting block");
     }
 }
