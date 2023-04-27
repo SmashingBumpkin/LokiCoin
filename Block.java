@@ -22,9 +22,12 @@ public class Block {
         this.blockNumber = Block.longestChain;
     }
 
-    public Boolean validateBlock(){
+    public Boolean validateBlock(String previousHash, int prefix, String prefixString){
         //checks if a block and it's contents are valid
-        return false;
+        Boolean flag = this.getHash().equals(this.calculateBlockHash())
+        && previousHash.equals(this.getPreviousHash())
+        && this.getHash().substring(0, prefix).equals(prefixString);
+        return flag;
     }
 
     public String getHash() {
@@ -44,7 +47,6 @@ public class Block {
     }
 
     public int nonce(){
-        //return jimmySaville;
         return this.nonce;
     }
     
@@ -68,7 +70,6 @@ public class Block {
         try {
             digest = MessageDigest.getInstance("SHA-256");
             bytes = digest.digest(dataToHash.getBytes("UTF-8"));
-
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             /*The line logger.log(Level.SEVERE, ex.getMessage()); is giving an error because
             the logger instance variable "logger" has not been initialized or defined within 
@@ -94,7 +95,6 @@ public class Block {
         String prefixString = new String(new char[prefix]).replace('\0', '0');
         while (!hash.substring(0, prefix).equals(prefixString)) {
             nonce++;
-
             //Nerfed mining algorithm, stops it from just wasting CPU power/levels playing field
             try {
                 Thread.sleep(1);
@@ -103,6 +103,8 @@ public class Block {
               }
             hash = calculateBlockHash();
         }
+        //TODO: parse transactions from block
+        //TODO: Update accounts based on the transactions
         System.out.println("New block generated");
         this.broadcastBlock();
         return hash;

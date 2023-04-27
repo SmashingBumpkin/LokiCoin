@@ -1,9 +1,13 @@
 public class Account {
     public int balance;
-    public int address;
+    public String address;
     public int nonce;
 
-    public Transaction generateHash(){
-        return new Transaction("SuperDuperSecret");
+    Account(String address){
+        this.address = address;
+        this.balance = 0;
+        this.nonce = 0;
     }
+
+    
 }

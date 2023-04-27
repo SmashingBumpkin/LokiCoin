@@ -34,15 +34,12 @@ public class Blockchain {
         boolean flag = true;
         int errorBlock = 0;
         for (int i = 0; i < blockchain.size(); i++) {
-            //TODO: refactor this code to call blockchain.get(i).validateBlock()
             String previousHash = i==0 ? "0" : blockchain.get(i - 1).getHash();
-            flag = blockchain.get(i).getHash().equals(blockchain.get(i).calculateBlockHash())
-            && previousHash.equals(blockchain.get(i).getPreviousHash())
-            && blockchain.get(i).getHash().substring(0, prefix).equals(prefixString);
+            flag = blockchain.get(i).validateBlock(previousHash, prefix, prefixString);
             if (!flag){
                 errorBlock = i;
                 break;
-            } 
+            }
         }
         if (flag){
             System.out.println("_____\nValid blockchain");

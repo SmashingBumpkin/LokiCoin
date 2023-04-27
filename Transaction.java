@@ -9,6 +9,15 @@ public class Transaction {
     public int fee; 
     public int nonce;
     public String hash;//Can be generated with all of the above information
+    
+    public Transaction(String sender, String receiver, int amount, int fee, int nonce){
+        //Generate a transacaction (excluding the hash)
+        this.sender = sender;
+        this.receiver = receiver;
+        this.amount = amount;
+        this.fee = fee;
+        this.nonce = nonce;
+    }
 
     public String getSender() {
         return sender;
@@ -59,19 +68,8 @@ public class Transaction {
         //
         return false;
     }
-    
-    public Transaction(String sender, String receiver){
-        //Generate a transacaction (excluding the hash)
-
-    }
-
-    public void buildTransaction(){
-        //Builds a tx
-
-        ///...... maybe thise should be in the account class
-    }
 
     public void broadcastTransaction(){
-        //builds a tx and sends it to any other nodes
+        //Sends the completed and hashed transaction to the miners
     }
 }
