@@ -1,9 +1,13 @@
+import java.security.MessageDigest;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 public class Transaction {
     public String sender;
     public String receiver;
     public int amount;
-    public int nonce;
     public int fee; 
+    public int nonce;
     public String hash;//Can be generated with all of the above information
 
     public String getSender() {
@@ -26,13 +30,15 @@ public class Transaction {
         return fee;
     }
 
-    public String getHash() {
-        return hash;
-    }
-
     public String getTxAsString(){
         //Condenses the details of the transaction into a single string
-        return "LOLLLL";
+        String output = getSender() + " " + getReceiver() + " " + getAmount() +
+            " " + getFee() + " " + getNonce();
+        return output;
+    }
+
+    public String getHash() {
+        return "Hashed transaction";
     }
 
     public String getTxWithHashAString(){
