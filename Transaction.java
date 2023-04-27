@@ -30,6 +30,10 @@ public class Transaction {
         return fee;
     }
 
+    public String getHash() {
+        return "Hashed transaction";
+    }
+
     public String getTxAsString(){
         //Condenses the details of the transaction into a single string
         String output = getSender() + " " + getReceiver() + " " + getAmount() +
@@ -37,7 +41,10 @@ public class Transaction {
         return output;
     }
 
-    public String getHash() {
+    public String generateHash(String privateKey) {
+        String txAsString = getTxAsString();
+
+        this.hash = "hashed tx";
         return "Hashed transaction";
     }
 
