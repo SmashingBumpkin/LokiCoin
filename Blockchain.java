@@ -47,4 +47,19 @@ public class Blockchain {
             System.out.println("_____\nERROR: Invalid blockchain. Error in Block " + errorBlock);
         }
     }
+
+    public void exportBlockchain(){
+        //TODO: Elena
+        //Export the whole blockchain
+    }
+
+    public void importBlockchain(){
+        //TODO: Elena
+        //Import a previously initialized blockchain
+        //Should import the data and call the Blockchain constructor, 
+            //might need a new constructor
+        //Also MUST validate the blockchain
+    }
+
+
 }

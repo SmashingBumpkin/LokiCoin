@@ -9,5 +9,15 @@ public class Account {
         this.nonce = 0;
     }
 
-    
+    public boolean checkTxValidity(int balance, int nonce){
+        //asserts the balance is high enough 
+        //asserts the nonce has increased
+        return false;
+    }
+
+    public void updateAccount(int balance, int nonce){
+        this.checkTxValidity(balance, nonce);
+        //deducts amount from balance of account
+        //updates nonce
+    }
 }

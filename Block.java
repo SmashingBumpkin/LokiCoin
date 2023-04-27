@@ -114,4 +114,15 @@ public class Block {
         //Broadcasts the newly mined block to the blockchain
         System.out.println("Broadcasting block");
     }
+
+    public void exportBlock(){
+        //TODO: Elena
+        //Export the current block
+    }
+
+    public void importBlock(){
+        //TODO: Elena
+        //Import the current block
+        //Should extract the data and call the "Block(.." constructor
+    }
 }

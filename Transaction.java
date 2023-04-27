@@ -19,6 +19,15 @@ public class Transaction {
         this.nonce = nonce;
     }
 
+    public Transaction(String sender, String receiver, int amount, int fee, int nonce, String hash){
+        //Generate a transacaction (excluding the hash)
+        this.sender = sender;
+        this.receiver = receiver;
+        this.amount = amount;
+        this.fee = fee;
+        this.nonce = nonce;
+    }
+
     public String getSender() {
         return sender;
     }
@@ -53,13 +62,19 @@ public class Transaction {
     public String generateHash(String privateKey) {
         //TODO: Joaquin to implement
         String txAsString = getTxAsString();
-
         this.hash = "hashed tx";
         return "Hashed transaction";
     }
 
     public String getTxWithHashAString(){
         return getTxAsString() + " " + getHash();
+    }
+
+    Transaction(String txAsString){
+        //TODO: Maria
+        //parse data from a string
+        //Check it's all valid <- this 
+        //Create a new transaction based on all of that
     }
 
     public boolean checkTransaction(){
@@ -71,5 +86,16 @@ public class Transaction {
 
     public void broadcastTransaction(){
         //Sends the completed and hashed transaction to the miners
+    }
+
+    public void exportTransaction(){
+        //TODO: Elena
+        //Exports a transaction for broadcasting
+    }
+    
+    public void importTransaction(){
+        //TODO: Elena
+        //Imports a transaction and constructs it
+        //Adds it to the mempool?
     }
 }
