@@ -42,6 +42,7 @@ public class Transaction {
     }
 
     public String generateHash(String privateKey) {
+        //TODO: Joaquin to implement
         String txAsString = getTxAsString();
 
         this.hash = "hashed tx";
@@ -53,13 +54,14 @@ public class Transaction {
     }
 
     public boolean checkTransaction(){
+        //TODO: Joaquin to implement
         //Implement checker to see if a transaction is valid
         //
         return false;
     }
     
-    public Transaction(String privateKey){
-        //parse received transaction string and try to build a transaction from it
+    public Transaction(String sender, String receiver){
+        //Generate a transacaction (excluding the hash)
 
     }
 
