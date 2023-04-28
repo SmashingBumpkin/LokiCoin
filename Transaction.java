@@ -28,29 +28,17 @@ public class Transaction {
         this.nonce = nonce;
     }
 
-    public String getSender() {
-        return sender;
-    }
+    public String getSender() {return sender;}
 
-    public String getReceiver() {
-        return receiver;
-    }
+    public String getReceiver() {return receiver;}
 
-    public int getAmount() {
-        return amount;
-    }
+    public int getAmount() {return amount;}
 
-    public int getNonce() {
-        return nonce;
-    }
+    public int getNonce() {return nonce;}
 
-    public int getFee() {
-        return fee;
-    }
+    public int getFee() {return fee;}
 
-    public String getHash() {
-        return "Hashed transaction";
-    }
+    public String getHash() {return "Hashed transaction";}
 
     public String getTxAsString(){
         //Condenses the details of the transaction into a single string

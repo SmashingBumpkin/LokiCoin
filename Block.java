@@ -30,29 +30,18 @@ public class Block {
         return flag;
     }
 
-    public String getHash() {
-        return this.hash;
-    }
+    public String getHash() { return this.hash;}
 
-    public String getPreviousHash() {
-        return this.previousHash;
-    }
+    public String getPreviousHash() {return this.previousHash;}
 
-    public String getData() {
-        return this.data;
-    }
+    public String getData() {return this.data;}
 
-    public long getTimeStamp(){
-        return this.timeStamp;
-    }
+    public long getTimeStamp(){return this.timeStamp;}
 
-    public int nonce(){
-        return this.nonce;
-    }
+    public int getNonce(){return this.nonce;}
     
-    public int blockNumber(){
-        return this.blockNumber;
-    }
+    public int getBlockNumber(){return this.blockNumber;
+}
 
     public String returnBlockPrintable(){
         String output = "__________\nBLOCK " + this.blockNumber + "\n\n"
