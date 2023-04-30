@@ -20,7 +20,7 @@ public class Transaction {
     }
 
     public Transaction(String sender, String receiver, int amount, int fee, int nonce, String hash){
-        //Generate a transacaction (excluding the hash)
+        //Generate a transacaction (including the hash)
         this.sender = sender;
         this.receiver = receiver;
         this.amount = amount;
