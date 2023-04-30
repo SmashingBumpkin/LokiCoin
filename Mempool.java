@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+
 public class Mempool {
     public List<LokiTransaction> mempool = new ArrayList<>();
 
@@ -36,4 +37,5 @@ public class Mempool {
             //adds it to the mempool
             //Sends it to other nodes
     }
+
 }

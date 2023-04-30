@@ -11,7 +11,6 @@ public class MinerThread extends Thread {
     public void run(){
         System.out.println("Miner " + this.account.getAddress() + " starting!");
         Block newBlock = this.account.mineBlock(this.account.getAddress(), MinerThread.blockchain.getLastHash());
-        newBlock.returnBlockPrintable();
         synchronized (this) {
             MinerThread.blockchain.addNewBlock(newBlock);
         }

@@ -8,6 +8,7 @@ public class Blockchain {
     public int prefix = 2;
     public String prefixString;
     public String lastHash;
+    public int blockchainHeight = 0;
     
 
     public Blockchain(int prefix) {
@@ -26,8 +27,11 @@ public class Blockchain {
     public void addNewBlock(Block newBlock){
         //Validate all transactions in the block
         //Add block to chain
-        this.blockchain.add(newBlock);
-        this.lastHash = newBlock.getHash();
+        if (newBlock.getBlockNumber() == this.blockchainHeight){
+            this.blockchain.add(newBlock);
+            this.lastHash = newBlock.getHash();
+            this.blockchainHeight++;
+        }
     }
 
     public void mineNewBlock(String data) {
@@ -42,7 +46,7 @@ public class Blockchain {
 
     public void mineNewBlock(String data, String rewardRecipient) {
         Block newBlock = new Block(
-            data, 
+            data,
             blockchain.get(blockchain.size() - 1).getHash(),
             new Date().getTime());
 
@@ -79,6 +83,4 @@ public class Blockchain {
             //might need a new constructor
         //Also MUST validate the blockchain
     }
-
-
 }
