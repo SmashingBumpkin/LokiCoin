@@ -2,7 +2,7 @@ public class LokiTransaction extends Transaction {
     public String receiver;
     public int amount;
 
-    public LokiTransaction(String sender, String receiver, int amount, int fee, int nonce) {
+    public LokiTransaction(String sender, int fee, int nonce, String receiver, int amount) {
         //Generate a LokiCoin transacaction (excluding the hash)
         super(sender, receiver, amount, fee, nonce); //Remove once Transaction.java is refactored
         //super(sender, fee, nonce); //New super!
@@ -10,7 +10,7 @@ public class LokiTransaction extends Transaction {
         this.amount = amount;
     }
 
-    public LokiTransaction(String sender, String receiver, int amount, int fee, int nonce, String hash){
+    public LokiTransaction(String sender, int fee, int nonce, String receiver, int amount, String hash){
         //Generate a LokiCoin transacaction (including the hash)
         super(sender, receiver, amount, fee, nonce, hash); //Remove once Transaction.java is refactored
         //super(sender, fee, nonce, hash); //New super!
@@ -18,12 +18,16 @@ public class LokiTransaction extends Transaction {
         this.amount = amount;
     }
 
-    public LokiTransaction(String txAsString){
-        //TODO: Maria
+    public Transaction lokiTransactionFromString(String txAsString){
         //parse data from a string
-        //Create a new transaction based on all of that
-        //LokiTransaction(sender, receiver, amount, fee, nonce, hash);
-        //Check it's all valid <- this 
+        //Return a new transaction based on all of that
+        String sender = "jeff";
+        String receiver = "Steve";
+        int amount = 1;
+        int fee = 1;
+        int nonce = 1;
+        String hash = "hash";
+        return new LokiTransaction(sender, fee, nonce, receiver, amount, hash);
     }
 
     public String getReceiver() {return receiver;}
@@ -40,5 +44,11 @@ public class LokiTransaction extends Transaction {
         String output = super.getTxAsString();
         output = output + " " + getReceiver() + " " + getAmount();
         return output;
+    }
+
+    public String getTxWithHashAsString(){
+        //Condenses the details of the transaction into a single string
+        String output = super.getTxWithHashAsString();
+        return output + " " + getReceiver() + " " + getAmount();
     }
 }

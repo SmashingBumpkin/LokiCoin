@@ -1,7 +1,3 @@
-import java.security.MessageDigest;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-
 public class Transaction {
     public String sender;
     public String receiver;
@@ -26,6 +22,13 @@ public class Transaction {
         this.amount = amount;
         this.fee = fee;
         this.nonce = nonce;
+    }
+
+    Transaction(String txAsString){
+        //TODO: Maria
+        //parse data from a string
+        //Check it's all valid <- this 
+        //Create a new transaction based on all of that
     }
 
     public String getSender() {return sender;}
@@ -54,15 +57,8 @@ public class Transaction {
         return "Hashed transaction";
     }
 
-    public String getTxWithHashAString(){
+    public String getTxWithHashAsString(){
         return getTxAsString() + " " + getHash();
-    }
-
-    Transaction(String txAsString){
-        //TODO: Maria
-        //parse data from a string
-        //Check it's all valid <- this 
-        //Create a new transaction based on all of that
     }
 
     public boolean checkTransaction(){

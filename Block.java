@@ -3,6 +3,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 //import java.util.logging.Level;
+import java.util.Date;
 
 public class Block {
     private String hash;
@@ -10,6 +11,7 @@ public class Block {
     private String data;
     private long timeStamp;
     private int nonce;
+    private String rewardRecipient;
     private static int longestChain = 0;
     private int blockNumber;
  
@@ -18,30 +20,25 @@ public class Block {
         this.previousHash = previousHash;
         this.timeStamp = timeStamp;
         this.hash = calculateBlockHash();
-        Block.longestChain++;
-        this.blockNumber = Block.longestChain;
+        this.blockNumber = Block.longestChain++;
     }
 
-    public Boolean validateBlock(String previousHash, int prefix, String prefixString){
-        //checks if a block and it's contents are valid
-        Boolean flag = this.getHash().equals(this.calculateBlockHash())
-        && previousHash.equals(this.getPreviousHash())
-        && this.getHash().substring(0, prefix).equals(prefixString);
-        return flag;
+    public Block(String data, String previousHash, String rewardRecipient) {
+        this.data = data;
+        this.previousHash = previousHash;
+        this.timeStamp = new Date().getTime();
+        this.hash = calculateBlockHash();
+        this.blockNumber = Block.longestChain++;
+        this.rewardRecipient = rewardRecipient;
     }
 
     public String getHash() { return this.hash;}
-
     public String getPreviousHash() {return this.previousHash;}
-
     public String getData() {return this.data;}
-
     public long getTimeStamp(){return this.timeStamp;}
-
     public int getNonce(){return this.nonce;}
-    
-    public int getBlockNumber(){return this.blockNumber;
-}
+    public int getBlockNumber(){return this.blockNumber;}
+    public String getRewardRecipient(){return this.rewardRecipient;}
 
     public String returnBlockPrintable(){
         String output = "__________\nBLOCK " + this.blockNumber + "\n\n"
@@ -49,11 +46,17 @@ public class Block {
         return output;
     }
 
+    public String returnBlockAsStringForHashing(){
+        String output = this.getPreviousHash() + " " 
+        + Long.toString(this.getTimeStamp()) + " "
+        + Integer.toString(this.getNonce()) + " "
+        + this.getData() + " "
+        + this.getRewardRecipient() + " ";
+        return output;
+    }
+
     public String calculateBlockHash() {
-        String dataToHash = previousHash 
-        + Long.toString(timeStamp) 
-        + Integer.toString(nonce) 
-        + data;
+        String dataToHash = returnBlockAsStringForHashing();
         MessageDigest digest = null;
         byte[] bytes = null;
         try {
@@ -82,7 +85,7 @@ public class Block {
 
     public String mineBlock(int prefix) {
         String prefixString = new String(new char[prefix]).replace('\0', '0');
-        while (!hash.substring(0, prefix).equals(prefixString)) {
+        while (!this.hash.substring(0, prefix).equals(prefixString)) {
             nonce++;
             //Nerfed mining algorithm, stops it from just wasting CPU power/levels playing field
             try {
@@ -90,13 +93,22 @@ public class Block {
               } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
               }
-            hash = calculateBlockHash();
+            this.hash = calculateBlockHash();
         }
         //TODO: parse transactions from block
         //TODO: Update accounts based on the transactions
         System.out.println("New block generated");
         this.broadcastBlock();
         return hash;
+    }
+
+    
+    public Boolean validateBlock(String previousHash, int prefix, String prefixString){
+        //checks if a block and it's contents are valid
+        Boolean flag = this.getHash().equals(this.calculateBlockHash())
+        && previousHash.equals(this.getPreviousHash())
+        && this.getHash().substring(0, prefix).equals(prefixString);
+        return flag;
     }
 
     public void broadcastBlock(){

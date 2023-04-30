@@ -7,6 +7,7 @@ public class Blockchain {
     public List<Block> blockchain = new ArrayList<>();
     public int prefix = 2;
     public String prefixString;
+    public String lastHash;
     
 
     public Blockchain(int prefix) {
@@ -14,10 +15,19 @@ public class Blockchain {
         this.prefixString = new String(new char[prefix]).replace('\0', '0');
     }
 
+    public String getLastHash(){ return this.lastHash; }
+
     public void printBlockchain(){
         for (Block block : this.blockchain) {
             System.out.println(block.returnBlockPrintable());
         }
+    }
+
+    public void addNewBlock(Block newBlock){
+        //Validate all transactions in the block
+        //Add block to chain
+        this.blockchain.add(newBlock);
+        this.lastHash = newBlock.getHash();
     }
 
     public void mineNewBlock(String data) {
@@ -28,6 +38,15 @@ public class Blockchain {
 
         newBlock.mineBlock(prefix);
         blockchain.add(newBlock);
+    }
+
+    public void mineNewBlock(String data, String rewardRecipient) {
+        Block newBlock = new Block(
+            data, 
+            blockchain.get(blockchain.size() - 1).getHash(),
+            new Date().getTime());
+
+        newBlock.mineBlock(prefix);
     }
 
     public void validateBlockchain() {

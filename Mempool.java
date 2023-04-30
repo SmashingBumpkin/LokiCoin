@@ -1,7 +1,22 @@
 import java.util.ArrayList;
 import java.util.List;
 public class Mempool {
-    public List<Transaction> blockchain = new ArrayList<>();
+    public List<LokiTransaction> mempool = new ArrayList<>();
+
+    public String getValidTransactionPool(){
+        String output = "";
+        List<String> senders = new ArrayList<>();
+        for (LokiTransaction tx : this.mempool) {
+            if (senders.contains(tx.getSender())) {
+            } else {
+                // add the sender to the list of senders
+                senders.add(tx.getSender());
+                // add the transaction ID to the output string
+                output += tx.getTxWithHashAsString() + "\n";
+            }
+        }
+        return output;
+    }
 
     public void checkAndRemoveTx(Transaction tx){
         //TODO
