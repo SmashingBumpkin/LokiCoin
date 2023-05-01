@@ -1,8 +1,3 @@
-//All these imports need to be properly understood
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-//import java.util.logging.Level;
 import java.util.Date;
 
 public class Block {
@@ -36,6 +31,7 @@ public class Block {
     //Probably should add setters as well.
     public void setNonce(int nonce) { this.nonce = nonce; }
     public void setHash(String hash) { this.hash = hash; } 
+    public void setTimeStamp(long timeStamp){ this.timeStamp = timeStamp;}
 
     public String returnBlockPrintable(){ //I'm pretty sure this should be a function like //def __repr__ in python
         String output = "__________\nBLOCK " + this.blockNumber + "\n\n"

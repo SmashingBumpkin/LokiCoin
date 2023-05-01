@@ -7,7 +7,7 @@ public class Blockchain {
 
     public List<Block> blockchain = new ArrayList<>();
     public Map<String, Account> accounts;
-    public int prefix = 2; //difficulty of the blockchain
+    public int prefix; //difficulty of the blockchain
     public String prefixString; //difficulty as a string prefix
     public String lastHash; //The most recent block hash
     public int blockchainHeight = 0; //height of the blockchain

@@ -13,6 +13,8 @@ public class Initializer {
         miner1.start();
         miner2.start();
 
+        //add a loop that spams transactions for the miners to pick up
+
         try {
             miner1.join();
         } catch (InterruptedException e) {

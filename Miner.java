@@ -1,13 +1,13 @@
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Map;
 
 public class Miner extends Account{
     
     private static int prefix; //The difficulty the account is mining
-    private static String prefixString;
-
+    private static String prefixString; //Difficulty represented as prefix
     public Blockchain localBlockchain = new Blockchain(prefix); //The account's local copy of the blockchain
 
     Miner(String pubKey, String privKey){
@@ -103,14 +103,15 @@ public class Miner extends Account{
         while (!newBlock.getHash().substring(0, Miner.prefix).equals(difficultyString)) {
             newBlock.setNonce(newBlock.getNonce()+1); //iterates nonce to force the hash to change
             //Nerfed mining algorithm, stops it from just wasting CPU power/levels playing field
+            newBlock.setTimeStamp(new Date().getTime());
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
             newBlock.setHash(Miner.calculateBlockHash(newBlock));
-            if (numberOfBlocksInPool != Network.getPotentialBlocks().size()){
-                numberOfBlocksInPool = Network.getPotentialBlocks().size();
+            if (numberOfBlocksInPool != Network.getNumberOfPotentialBlocks()){
+                numberOfBlocksInPool = Network.getNumberOfPotentialBlocks();
                 System.out.println("The number of blocks in the pool is: " + numberOfBlocksInPool);
                 //This should check the latest blocks from the pool. If they are valid and longer, stop mining and start using them
             }

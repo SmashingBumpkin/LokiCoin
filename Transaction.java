@@ -57,6 +57,7 @@ public class Transaction {
     }
 
     public boolean checkTransaction(){
+        //TODO: DEPRECATE and move to Miner
         //TODO: Joaquin to implement
         //Implement checker to see if a transaction is valid
         //
@@ -64,6 +65,7 @@ public class Transaction {
     }
 
     public void broadcastTransaction(){
+        //TODO: DEPRECATE and move to Miner
         //Sends the completed and hashed transaction to the miners
     }
 
