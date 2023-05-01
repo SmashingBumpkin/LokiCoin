@@ -32,17 +32,12 @@ public class Transaction {
     }
 
     public String getSender() {return sender;}
-
     public String getReceiver() {return receiver;}
-
     public int getAmount() {return amount;}
-
     public int getNonce() {return nonce;}
-
     public int getFee() {return fee;}
-
     public String getHash() {return "Hashed transaction";}
-
+    
     public String getTxAsString(){
         //Condenses the details of the transaction into a single string
         String output = getSender() + " " + getReceiver() + " " + getAmount() +

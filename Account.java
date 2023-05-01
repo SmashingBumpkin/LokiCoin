@@ -2,11 +2,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Account {
-    public int balance;
-    public final String address;
-    public int nonce;
-    private final String privKey;
-    public static int prefix;
+    private int balance; //Account balance
+    private final String address; //address of the account
+    private int nonce; //The nonce of the account, must always go up
+    private final String privKey; //The private key of the account, used for signing transactions
+
+    //Every account which is mining needs it's own copy of the blockchain
+    //This should probably be set up as a subclass of Account...
 
     Account(String address, String privKey){
         this.address = address;
@@ -19,6 +21,11 @@ public class Account {
     public String getAddress() { return this.address; }
     public int getNonce() { return this.nonce; }
     private String getPrivKey() { return this.privKey; }
+
+    public void debitBalance(int debit) { this.balance -= debit; }
+    public void creditBalance(int credit) { this.balance += credit; }
+    public void setNonce(int nonce) { this.nonce = nonce; }
+    
 
     
     public static Map<String, String> generateKeys() {
@@ -35,41 +42,10 @@ public class Account {
     }
 
     public Account generateAccount(){
+        //Returns a new account with automatically generated keys
         Map<String, String> keys = Account.generateKeys();
         return new Account(keys.get("pubKey"), keys.get("privKey"));
     }
 
-    public boolean checkTxValidity(int fee, int amount, int nonce){
-        //asserts the balance is high enough 
-        //asserts the nonce has increased
-        if (this.balance >= fee + amount && this.nonce > nonce) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean debitAccount(int fee, int amount, int nonce){
-        //check tx then deducts amount from balance of account
-        //updates nonce
-        if (this.checkTxValidity(fee, amount, nonce)) {
-            this.balance -= amount;
-            this.nonce = nonce;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void creditAccount(int amount){
-        //deducts amount from balance of account
-        //updates nonce
-        this.balance += amount;
-    }
-
-    public Block mineBlock(String data, String previousHash){
-        Block newBlock = new Block(data, previousHash, this.address);
-        newBlock.mineBlock(Account.prefix);
-        return newBlock;
-    }
+    //TODO: public Transaction generateTransaction(){}
 }
