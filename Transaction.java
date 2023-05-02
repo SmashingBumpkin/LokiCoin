@@ -17,11 +17,8 @@ public class Transaction {
 
     public Transaction(String sender, String receiver, int amount, int fee, int nonce, String hash){
         //Generate a transacaction (including the hash)
-        this.sender = sender;
-        this.receiver = receiver;
-        this.amount = amount;
-        this.fee = fee;
-        this.nonce = nonce;
+        this(sender, receiver, amount, fee, nonce);
+        this.hash = hash;
     }
 
     Transaction(String txAsString){
@@ -29,6 +26,7 @@ public class Transaction {
         //parse data from a string
         //Check it's all valid <- this 
         //Create a new transaction based on all of that
+        //this(sender, receiver, amount, fee, nonce, hash);
     }
 
     public String getSender() {return sender;}
@@ -65,7 +63,7 @@ public class Transaction {
     }
 
     public void broadcastTransaction(){
-        //TODO: DEPRECATE and move to Miner
+        //TODO: DEPRECATE and move to Miner or MinerThread
         //Sends the completed and hashed transaction to the miners
     }
 
