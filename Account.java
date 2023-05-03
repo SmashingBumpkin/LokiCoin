@@ -22,6 +22,13 @@ public class Account {
         this.pubKey = pubKey;
     }
 
+    Account(){
+        //Returns a new account with automatically generated keys
+        KeyPair keys = Account.generateKeyPair();
+        this.pubKey = keys.getPublic();
+        this.privKey = keys.getPrivate();
+    }
+
     public int getBalance() { return this.balance; }
     public PublicKey getPubKey() { return this.pubKey; }
     public int getNonce() { return this.nonce; }
@@ -42,18 +49,6 @@ public class Account {
             e.printStackTrace();
         }
         return pair;
-    }
-
-    public Account generateAccount() {
-        //Returns a new account with automatically generated keys
-        KeyPair keys = null;
-        try {
-            keys = Account.generateKeyPair();
-        } catch (Exception e) {
-            System.out.println("ERROR GENERATING KEYS");
-            e.printStackTrace();
-        }
-        return new Account(keys.getPublic(), keys.getPrivate());
     }
 
     public LokiTransaction generateLokiTransaction(PublicKey recipient, int amount, int fee) {

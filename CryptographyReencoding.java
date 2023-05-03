@@ -28,9 +28,16 @@ public class CryptographyReencoding {
     }
 
     public static String pubKeyAsString(PublicKey pubKey){
-        byte[] jeff = pubKey.getEncoded();
-
-        return CryptographyReencoding.bytesAsString(jeff);
+        byte[] pubKeyAsBytes = pubKey.getEncoded();
+        String output = CryptographyReencoding.bytesAsString(pubKeyAsBytes);
+        // output.substring(52, 315);
+        return output; 
+    }
+    public static String pubKeyAsString2(PublicKey pubKey){
+        byte[] pubKeyAsBytes = pubKey.getEncoded();
+        String output = CryptographyReencoding.bytesAsString(pubKeyAsBytes);
+        output = output.substring(58, 315);
+        return output; 
     }
 
     public static PublicKey stringAsPubKey(String str){

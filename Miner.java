@@ -1,5 +1,4 @@
 import java.io.UnsupportedEncodingException;
-import java.security.KeyPair;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -13,14 +12,12 @@ public class Miner extends Account{
     private static String prefixString; //Difficulty represented as prefix
     public Blockchain localBlockchain = new Blockchain(prefix); //The account's local copy of the blockchain
 
-    Miner(PublicKey pubKey, PrivateKey privKey){
-        super(pubKey, privKey);
+    Miner(){
+        super();
     }
 
-    public Miner generateMiner() {
-        //Returns a new miner with automatically generated keys
-        KeyPair keys = Account.generateKeyPair();
-        return new Miner(keys.getPublic(), keys.getPrivate());
+    Miner(PublicKey pubKey, PrivateKey privKey){
+        super(pubKey, privKey);
     }
 
     public static String getPrefixString(){ return Miner.prefixString; }
@@ -30,44 +27,41 @@ public class Miner extends Account{
         Miner.prefixString = new String(new char[Miner.prefix]).replace('\0', '0'); 
     }
 
-    public boolean checkTxValidity(LokiTransaction tx) throws Exception{
+    public boolean checkTxValidity(LokiTransaction tx) {
         //Check the transaction hash is valid
-        Signature verifier = Signature.getInstance("SHA256withRSA");
-        verifier.initVerify(tx.getSender());
-        String txAsString = tx.getTxAsString();
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-        byte[] messageHash = messageDigest.digest(txAsString.getBytes());
-        verifier.update(messageHash);
-        boolean verified = verifier.verify(tx.getHash());
-
         Account account = getAccount(tx.getSender());
-
-        if (verified 
-            && account.getBalance() >= (tx.getAmount() + tx.getFee())
-            && tx.getNonce() > account.getNonce()){
-            verified = true;
+        //Checks if the sender has enough to pay the fee + amount
+        //Checks the transaction's nonce is higher than the sender's
+        if (account.getBalance() >= (tx.getAmount() + tx.getFee())
+            && tx.getNonce() > account.getNonce()) {
+            
+            //Checks the tx was correctly signed
+            try {
+                Signature verifier;
+                verifier = Signature.getInstance("SHA256withRSA");
+                verifier.initVerify(tx.getSender());
+                String txAsString = tx.getTxAsString();
+                MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+                byte[] messageHash = messageDigest.digest(txAsString.getBytes());
+                verifier.update(messageHash);
+                return verifier.verify(tx.getHash());
+            } catch (Exception e) {
+                // Something failed therefore invalid transaction
+                e.printStackTrace();
+                return false;
+            }
         } else {
-            verified = false;
+            return false;   
         }
-        //Check if the sender has enough to pay the fee + amount
-        //Check the transaction's nonce is higher than the sender's
-        //else return false
-        return verified;
     }
 
-    public boolean executeTransaction(LokiTransaction tx) throws Exception {
-        //checks tx then deducts amount from balance of account
+    public void executeTransaction(LokiTransaction tx) throws Exception {
         //updates nonce
-        if (this.checkTxValidity(tx)) {
-            Account senderAccount = getAccount(tx.getSender());
-            senderAccount.debitBalance(tx.getAmount() + tx.getFee());
-            Account recipientAccount = getAccount(tx.getRecipient());
-            recipientAccount.creditBalance(tx.getAmount());
-            senderAccount.setNonce(tx.getNonce());
-            return true;
-        } else {
-            return false;
-        }
+        Account senderAccount = getAccount(tx.getSender());
+        senderAccount.debitBalance(tx.getAmount() + tx.getFee());
+        Account recipientAccount = getAccount(tx.getRecipient());
+        recipientAccount.creditBalance(tx.getAmount());
+        senderAccount.setNonce(tx.getNonce());
     }
 
     public boolean executeBlock(Block block){
@@ -78,7 +72,6 @@ public class Miner extends Account{
         //Credits rewardee
         PublicKey blockRewardee = block.getRewardRecipient();
         Account rewardee = getAccount(blockRewardee);
-        
         rewardee.creditBalance(Block.blockReward);
 
         return true;
@@ -103,13 +96,8 @@ public class Miner extends Account{
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             System.out.println("ERROR");
             System.out.println(ex.getMessage());
-            //logger.log(Level.SEVERE, ex.getMessage());
         }
-        StringBuffer buffer = new StringBuffer();
-        for (byte b : bytes) {
-            buffer.append(String.format("%02x", b));
-        }
-        return buffer.toString();
+        return CryptographyReencoding.bytesAsString(bytes);
     }
     
     public Boolean validateBlock(Block block, String previousHash){

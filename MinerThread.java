@@ -1,5 +1,3 @@
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 public class MinerThread extends Thread {
@@ -10,8 +8,7 @@ public class MinerThread extends Thread {
 
     public MinerThread() {
         super();
-        KeyPair keyPair = Account.generateKeyPair();
-        this.miner = new Miner(keyPair.getPublic(), keyPair.getPrivate());
+        this.miner = new Miner();
         List<Block> potentialBlocks = Network.getPotentialBlocks();
         if (potentialBlocks.size() > 0){
             for (Block block : potentialBlocks){

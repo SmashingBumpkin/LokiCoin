@@ -1,4 +1,6 @@
 import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LokiTransaction extends Transaction {
     public PublicKey recipient;
@@ -16,6 +18,12 @@ public class LokiTransaction extends Transaction {
         super(sender, fee, nonce, hash); 
         this.recipient = recipient;
         this.amount = amount;
+    }
+
+    public LokiTransaction(Transaction tx){
+        super(tx.getSender(), tx.getFee(), tx.getNonce());
+        String data = tx.getData();
+        this.genericTxDataToLoki(data);
     }
 
     // public Transaction lokiTransactionFromString(String txAsString){
@@ -50,5 +58,17 @@ public class LokiTransaction extends Transaction {
         return "\nSENDER:\n" + CryptographyReencoding.pubKeyAsString(getSender()) + "\nFee: " + getFee()
                 + "   Nonce: " + getNonce() + "\nRecipient:\n" + CryptographyReencoding.pubKeyAsString(getRecipient())
                 + "\nAmount: " + getAmount() + "\n";
-}
+    }
+
+    public Transaction lokiToGenericTransaction(){
+        Transaction outputTx = new Transaction(this.sender, this.fee, this.nonce, this.hash);
+        outputTx.setData("" + this.amount + " " + CryptographyReencoding.pubKeyAsString(this.recipient));
+        return outputTx;
+    }
+
+    public void genericTxDataToLoki(String data){
+        String[] dataAsList = data.split(" ");
+        this.amount = Integer.parseInt(dataAsList[0]);
+        this.recipient = CryptographyReencoding.stringAsPubKey(dataAsList[1]);
+    }
 }

@@ -31,7 +31,7 @@ public class Initializer {
         // } catch (InterruptedException e) {
         //     e.printStackTrace();
         // }
-        // miner1.miner.printBlockchain();
+        miner1.miner.printBlockchain();
         // miner1.miner.printAccounts();
 
         long startTime = System.currentTimeMillis();
@@ -39,8 +39,9 @@ public class Initializer {
         for (int i=0; i<4; i++){
             LokiTransaction tx = miner1.miner.generateLokiTransaction(miner2.miner.getPubKey(), 100, 5);
             System.out.println(tx.getTxPrintable());
+            System.out.println(CryptographyReencoding.pubKeyAsString2(tx.getRecipient()));
             try {
-                System.out.println(miner1.miner.executeTransaction(tx));
+                miner1.miner.executeTransaction(tx);
             } catch (Exception e) {
                 System.out.println("Invalid tx");
             }
@@ -50,7 +51,7 @@ public class Initializer {
             LokiTransaction tx = miner2.miner.generateLokiTransaction(miner1.miner.getPubKey(), 20, 5);
             System.out.println(tx.getTxPrintable());
             try {
-                System.out.println(miner1.miner.executeTransaction(tx));
+                miner1.miner.executeTransaction(tx);
             } catch (Exception e) {
                 System.out.println("Invalid tx");
             }
