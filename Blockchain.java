@@ -1,4 +1,6 @@
+import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 //import static org.junit.Assert.*;
 import java.util.Map;
@@ -6,7 +8,7 @@ import java.util.Map;
 public class Blockchain {
 
     public List<Block> blockchain = new ArrayList<>();
-    public Map<String, Account> accounts;
+    public Map<PublicKey, Account> accounts = new HashMap<>();
     public int prefix; //difficulty of the blockchain
     public String prefixString; //difficulty as a string prefix
     public String lastHash; //The most recent block hash
@@ -25,6 +27,10 @@ public class Blockchain {
         this.blockchain.add(newBlock);
         this.lastHash = newBlock.getHash();
         this.blockchainHeight++;
+    }
+
+    public void addNewAccount(Account account){
+        this.accounts.put(account.getPubKey(), account);
     }
 
     public void exportBlockchain(){

@@ -1,3 +1,4 @@
+import java.security.PublicKey;
 import java.util.Date;
 
 public class Block {
@@ -6,29 +7,28 @@ public class Block {
     private String data; //All of the transactions and stuff being written to the blockchain
     private long timeStamp; //time the block is mined
     private int nonce; //used to randomize the block hash
-    private String rewardRecipient; //The miner who gets the block reward 
+    private PublicKey rewardRecipient; //The miner who gets the block reward 
                                     //(the prize for being the successfull miner)
     // private static int longestChain = 0; //Needs removing
     private int blockNumber; //must be one greater than the previous block
-    private static final int blockReward = 100;
+    public static final int blockReward = 100;
 
-    public Block(String data, String previousHash, String rewardRecipient, int previousBlockHeight) {
+    public Block(String data, String previousHash, PublicKey rewardRecipient, int blockHeight) {
         this.data = data;
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
-        this.blockNumber = previousBlockHeight + 1;
+        this.blockNumber = blockHeight;
         this.rewardRecipient = rewardRecipient;
     }
 
-    //Getters
+    //Getters & setters
     public String getHash() { return this.hash;}
     public String getPreviousHash() {return this.previousHash;}
     public String getData() {return this.data;}
     public long getTimeStamp(){return this.timeStamp;}
     public int getNonce(){return this.nonce;}
     public int getBlockNumber(){return this.blockNumber;}
-    public String getRewardRecipient(){return this.rewardRecipient;}
-    //Probably should add setters as well.
+    public PublicKey getRewardRecipient(){return this.rewardRecipient;}
     public void setNonce(int nonce) { this.nonce = nonce; }
     public void setHash(String hash) { this.hash = hash; } 
     public void setTimeStamp(long timeStamp){ this.timeStamp = timeStamp;}

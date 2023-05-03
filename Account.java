@@ -1,51 +1,87 @@
-import java.util.HashMap;
-import java.util.Map;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.MessageDigest;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
 
 public class Account {
-    private int balance; //Account balance
-    private final String address; //address of the account
-    private int nonce; //The nonce of the account, must always go up
-    private final String privKey; //The private key of the account, used for signing transactions
+    private int balance = 0; //Account balance
+    private final PublicKey pubKey; //address of the account
+    private int nonce = 0; //The nonce of the account, must always go up
+    private PrivateKey privKey; //The private key of the account, used for signing transactions
 
     //Every account which is mining needs it's own copy of the blockchain
     //This should probably be set up as a subclass of Account...
 
-    Account(String address, String privKey){
-        this.address = address;
+    Account(PublicKey pubKey, PrivateKey privKey){
+        this.pubKey = pubKey;
         this.privKey = privKey;
-        this.balance = 0;
-        this.nonce = 0;
+    }
+    Account(PublicKey pubKey){
+        this.pubKey = pubKey;
     }
 
     public int getBalance() { return this.balance; }
-    public String getAddress() { return this.address; }
+    public PublicKey getPubKey() { return this.pubKey; }
     public int getNonce() { return this.nonce; }
-    private String getPrivKey() { return this.privKey; }
-
     public void debitBalance(int debit) { this.balance -= debit; }
     public void creditBalance(int credit) { this.balance += credit; }
     public void setNonce(int nonce) { this.nonce = nonce; }
-    
 
-    
-    public static Map<String, String> generateKeys() {
+    public static KeyPair generateKeyPair(){
         // Generate public key and private key
-        Map<String, String> keys = new HashMap<>();
-        
-        //TODO: Joaquin
-        String pubKey = "my public key";// logic to generate public key
-        String privKey = "my private key";// logic to generate private key
-
-        keys.put("pubKey", pubKey);
-        keys.put("privKey", privKey);
-        return keys;
+        KeyPairGenerator keyPairGen;
+        KeyPair pair = null;
+        try {
+            keyPairGen = KeyPairGenerator.getInstance("RSA");
+            keyPairGen.initialize(1024);
+            pair = keyPairGen.generateKeyPair();
+        } catch (Exception e) {
+            System.out.println("ERROR GENERATING KEYS");
+            e.printStackTrace();
+        }
+        return pair;
     }
 
-    public Account generateAccount(){
+    public Account generateAccount() {
         //Returns a new account with automatically generated keys
-        Map<String, String> keys = Account.generateKeys();
-        return new Account(keys.get("pubKey"), keys.get("privKey"));
+        KeyPair keys = null;
+        try {
+            keys = Account.generateKeyPair();
+        } catch (Exception e) {
+            System.out.println("ERROR GENERATING KEYS");
+            e.printStackTrace();
+        }
+        return new Account(keys.getPublic(), keys.getPrivate());
     }
 
-    //TODO: public Transaction generateTransaction(){}
+    public LokiTransaction generateLokiTransaction(PublicKey recipient, int amount, int fee) {
+        this.nonce++;
+        LokiTransaction lokiTransaction =  new LokiTransaction(this.getPubKey(), fee, this.nonce, recipient, amount);
+        String txAsString = lokiTransaction.getTxAsString();
+        
+        MessageDigest messageDigest;
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+            byte[] messageHash = messageDigest.digest(txAsString.getBytes());
+            Signature signature = Signature.getInstance("SHA256withRSA");
+            signature.initSign(this.privKey);
+            signature.update(messageHash);
+            byte[] digitalSignature = signature.sign();
+            lokiTransaction.setHash(digitalSignature);
+        } catch (Exception e) {
+            System.out.println("Error generating loki transaction");
+            e.printStackTrace();
+        }
+        return lokiTransaction;
+    }
+
+    public void broadcastTransaction(Transaction tx){
+        Network.addPotentialTransaction(tx);
+    }
+
+    public String returnAccountPrintable(){
+        return "Address " + this.pubKey.hashCode() + " has balance " + this.balance;
+    }
 }
