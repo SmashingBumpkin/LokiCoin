@@ -13,7 +13,7 @@
          <children>
             <ImageView fx:id="LokiCoinimg" fitHeight="100.0" fitWidth="200.0" layoutX="93.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>
-                  <Image url="@loki.png" />
+                  <Image url="@loki.jpg" />
                </image>
             </ImageView>
             <Button layoutX="173.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoHome" prefHeight="33.0" prefWidth="120.0" style="-fx-background-color: #778899;" text="Ho(m)e" textFill="MAGENTA">
