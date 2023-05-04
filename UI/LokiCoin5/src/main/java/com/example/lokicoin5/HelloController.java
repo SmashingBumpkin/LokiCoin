@@ -53,7 +53,7 @@ public class HelloController {
         welcomeText.setText("Insert Something Funny");
     }
 
-
+    /*
     @FXML
     public void PlayXand0(ActionEvent event) throws IOException {
         File ticTacToe = new File("/Applications/Tic-Tac-Toe.app");
@@ -83,4 +83,6 @@ public class HelloController {
         File Chode = new File("/Users/jasch/Desktop/LokiCoin/PleaseWork/LokiCoin5/src/main/java/com/example/lokicoin5/HelloController.java");
         Desktop.getDesktop().open(Chode);
     }
+   
+     */
 }
