@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import java.awt.Desktop;
 
+import com.example.lokicoin5.hi;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,9 +52,11 @@ public class HelloController {
     @FXML
     protected void StartClicked() {
         welcomeText.setText("Insert Something Funny");
+        hi h = new hi();
+        h.run();
     }
 
-    /*
+
     @FXML
     public void PlayXand0(ActionEvent event) throws IOException {
         File ticTacToe = new File("/Applications/Tic-Tac-Toe.app");
@@ -83,6 +86,4 @@ public class HelloController {
         File Chode = new File("/Users/jasch/Desktop/LokiCoin/PleaseWork/LokiCoin5/src/main/java/com/example/lokicoin5/HelloController.java");
         Desktop.getDesktop().open(Chode);
     }
-
-     */
 }
