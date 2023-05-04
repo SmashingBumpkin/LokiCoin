@@ -4,8 +4,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Miner extends Account{
     
@@ -112,7 +115,7 @@ public class Miner extends Account{
     }
     
     public Boolean validateBlock(Block block, String previousHash){
-        //String prefixString = new String(new char[Miner.prefix]).replace('\0', '0'); 
+
         //checks if a block and it's contents are valid
         Boolean flag = block.getPreviousHash().equals(previousHash) //rehashes the block to check it was hashed correctly
         && block.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
@@ -120,12 +123,24 @@ public class Miner extends Account{
         
         if (flag) {
             //Needs to check to see if transactions are valid
+            Set<PublicKey> senders = new HashSet<PublicKey>(); 
             for (Transaction tx : block.getTransactions()){
+                boolean duplicateSender = senders.add(tx.getSender());
+                if (!duplicateSender){
+                    System.out.println("DUPLICATE SENDER IN BLOCK:\n " + tx.getTxAsString());
+                    break;
+                }
+                
                 try {
                     LokiTransaction lokiTx = new LokiTransaction(tx);
                     boolean validTx = checkTxValidity(lokiTx);
+                    if (!validTx){
+                        System.out.println("INVALID TX IN BLOCK:\n " + lokiTx.getTxPrintable());
+                        break;
+                    }
                 } catch (Exception e){
-
+                    System.out.println("\n\nERROR PARSING LOKITX");
+                    //Try and parse tx as a different type
                 }
             }
             //Every sender should appear at most one time
