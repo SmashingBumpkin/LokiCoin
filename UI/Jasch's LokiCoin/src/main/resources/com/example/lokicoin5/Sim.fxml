@@ -11,22 +11,22 @@
    <children>
       <AnchorPane layoutX="461.0" layoutY="-86.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #778899;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="93.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="700.0" AnchorPane.topAnchor="0.0">
+            <ImageView fitHeight="100.0" fitWidth="200.0" layoutX="93.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                <image>
                   <Image url="@loki.png" />
                </image>
             </ImageView>
-            <Button layoutX="173.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoHome" prefHeight="33.0" prefWidth="120.0" style="-fx-background-color: #778899;" text="Ho(m)e" textFill="MAGENTA" AnchorPane.leftAnchor="173.0" AnchorPane.rightAnchor="507.0" AnchorPane.topAnchor="26.0">
+            <Button layoutX="173.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoHome" prefHeight="33.0" prefWidth="120.0" style="-fx-background-color: #778899;" text="Ho(m)e" textFill="MAGENTA">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button layoutX="374.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoSim" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: #778899;" text="Simp" textFill="MAGENTA" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="374.0" AnchorPane.rightAnchor="306.0" AnchorPane.topAnchor="25.0">
+            <Button layoutX="374.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoSim" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: #778899;" text="Simp" textFill="MAGENTA">
                <font>
                   <Font size="24.0" />
                </font>
             </Button>
-            <Button layoutX="583.0" layoutY="24.0" mnemonicParsing="false" onAction="#GoGames" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: #778899;" text="Gayme" textFill="MAGENTA" AnchorPane.bottomAnchor="26.0" AnchorPane.leftAnchor="583.0" AnchorPane.rightAnchor="97.0" AnchorPane.topAnchor="24.0">
+            <Button layoutX="583.0" layoutY="24.0" mnemonicParsing="false" onAction="#GoGames" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: #778899;" text="Gayme" textFill="MAGENTA">
                <font>
                   <Font size="24.0" />
                </font>
@@ -35,12 +35,12 @@
       </AnchorPane>
       <AnchorPane layoutX="312.0" layoutY="150.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #e6e6fa;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
          <children>
-            <Button layoutX="306.0" layoutY="256.0" mnemonicParsing="false" onAction="#StartClicked" prefHeight="72.0" prefWidth="188.0" style="-fx-background-color: #00ff00;" text="Start " textFill="RED" AnchorPane.bottomAnchor="70.0" AnchorPane.rightAnchor="306.0">
+            <Button layoutX="306.0" layoutY="256.0" mnemonicParsing="false" onAction="#StartClicked" prefHeight="72.0" prefWidth="188.0" style="-fx-background-color: #00ff00;" text="Start " textFill="RED">
                <font>
                   <Font name="Mali Regular" size="36.0" />
                </font>
             </Button>
-            <ImageView fitHeight="214.0" fitWidth="349.0" layoutX="239.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="161.0" AnchorPane.leftAnchor="239.0" AnchorPane.rightAnchor="239.7637939453125" AnchorPane.topAnchor="25.0">
+            <ImageView fitHeight="214.0" fitWidth="349.0" layoutX="239.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@Images/Stonks.png" />
                </image>
@@ -49,7 +49,7 @@
                <font>
                   <Font name="Gotu" size="24.0" />
                </font></Label>
-            <Button layoutX="707.0" layoutY="364.0" mnemonicParsing="false" onAction="#ViewCode" style="-fx-background-color: 000000;" text="View Code " textFill="#0004ff" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="707.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="364.0" />
+            <Button layoutX="707.0" layoutY="364.0" mnemonicParsing="false" onAction="#ViewCode" style="-fx-background-color: 000000;" text="View Code " textFill="#0004ff" />
          </children></AnchorPane>
    </children>
 </AnchorPane>

@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import java.awt.Desktop;
 
+import com.example.lokicoin5.hi;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,38 +52,39 @@ public class HelloController {
     @FXML
     protected void StartClicked() {
         welcomeText.setText("Insert Something Funny");
+        hi h = new hi();
+        h.run();
+
     }
 
 
     @FXML
     public void PlayXand0(ActionEvent event) throws IOException {
-        File ticTacToe = new File("/Applications/Tic-Tac-Toe.app"); // Insert address to the tic tac toe app
+        File ticTacToe = new File("/Applications/Tic-Tac-Toe.app");
         Desktop.getDesktop().open(ticTacToe);
     }
 
     @FXML
     public void RickRoll(ActionEvent event) throws IOException {
-        File rick = new File("/Users/jasch/Desktop/LokiCoin/images/Ricky.app"); // Insert address to game1
+        File rick = new File("/Users/jasch/Desktop/LokiCoin/images/Ricky.app");
         Desktop.getDesktop().open(rick);
     }
 
     @FXML
     public void PlayShatranj(ActionEvent event) throws IOException {
-        File Shatranj = new File("/System/Applications/Chess.app"); // Insert address to game2
+        File Shatranj = new File("/System/Applications/Chess.app");
         Desktop.getDesktop().open(Shatranj);
     }
 
     @FXML
     public void ViewCode(ActionEvent event) throws IOException {
-        File Chode = new File("/Users/jasch/Desktop/LokiCoin/PleaseWork/LokiCoin5/src/main/java/com/example/lokicoin5/HelloApplication.java"); // Insert address to simulation code
+        File Chode = new File("/Users/jasch/Desktop/LokiCoin/PleaseWork/LokiCoin5/src/main/java/com/example/lokicoin5/HelloApplication.java");
         Desktop.getDesktop().open(Chode);
     }
 
     @FXML
     public void ViewCode2(ActionEvent event) throws IOException {
-        File Chode = new File("/Users/jasch/Desktop/LokiCoin/PleaseWork/LokiCoin5/src/main/java/com/example/lokicoin5/HelloController.java"); // Insert adddress to game code
+        File Chode = new File("/Users/jasch/Desktop/LokiCoin/PleaseWork/LokiCoin5/src/main/java/com/example/lokicoin5/HelloController.java");
         Desktop.getDesktop().open(Chode);
     }
-
-
 }
