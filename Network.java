@@ -1,3 +1,4 @@
+@@ -0,0 +1,40 @@
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,10 @@ public class Network {
     public static int getNumberOfPotentialBlocks() {return Network.numberOfPotentialBlocks;}
 
     // Adder for potentialBlocks list
-    public static void addPotentialBlock(Block block) {
+    public static int addPotentialBlock(Block block) {
         Network.potentialBlocks.add(block);
-        Network.numberOfPotentialBlocks++;
+        block.setBlockPositionInNetwork(numberOfPotentialBlocks++);
+        return numberOfPotentialBlocks;
     }
 
     // Getter for potentialTransactions list
