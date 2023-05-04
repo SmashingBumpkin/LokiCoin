@@ -5,14 +5,14 @@ public class Initializer {
         System.out.println("Initializing network LFG");
 
         //miner1 starts a new network
-        MinerThread miner1 = MinerThread.startNewNetwork(1);
+        Miner miner1 = Miner.startNewNetwork(1);
 
 
         //TEMPORARY - miner2 should get the data from the network and continue working on the same network
-        MinerThread miner2 = MinerThread.startNewNetwork(1);
+        // Miner miner2 = Miner.startNewNetwork(1);
 
-        // MinerThread miner1 = new MinerThread();
-        // MinerThread miner2 = new MinerThread();
+        // Miner miner1 = new Miner();
+        Miner miner2 = new Miner();
 
         miner1.start();
 
@@ -31,33 +31,36 @@ public class Initializer {
         // } catch (InterruptedException e) {
         //     e.printStackTrace();
         // }
-        miner1.miner.printBlockchain();
+        miner1.printBlockchain();
         // miner1.miner.printAccounts();
 
         long startTime = System.currentTimeMillis();
 
         for (int i=0; i<4; i++){
-            LokiTransaction tx = miner1.miner.generateLokiTransaction(miner2.miner.getPubKey(), 100, 5);
+            LokiTransaction tx = miner1.generateLokiTransaction(miner2.getPubKey(), 100, 5);
             System.out.println(tx.getTxPrintable());
-            System.out.println(CryptographyReencoding.pubKeyAsString2(tx.getRecipient()));
             try {
-                miner1.miner.executeTransaction(tx);
+                if (miner1.checkTxValidity(tx)){
+                    miner1.executeTransaction(tx);
+                }
             } catch (Exception e) {
                 System.out.println("Invalid tx");
             }
         }
 
-        for (int i=0; i<4; i++){
-            LokiTransaction tx = miner2.miner.generateLokiTransaction(miner1.miner.getPubKey(), 20, 5);
+        for (int i=0; i<0; i++){
+            LokiTransaction tx = miner2.generateLokiTransaction(miner1.getPubKey(), 20, 5);
             System.out.println(tx.getTxPrintable());
             try {
-                miner1.miner.executeTransaction(tx);
+                if (miner1.checkTxValidity(tx)){
+                    miner1.executeTransaction(tx);
+                }
             } catch (Exception e) {
                 System.out.println("Invalid tx");
             }
         }
 
-        miner1.miner.printAccounts();
+        miner1.printAccounts();
         
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;

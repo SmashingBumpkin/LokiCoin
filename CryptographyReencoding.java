@@ -23,24 +23,21 @@ public class CryptographyReencoding {
             String hexByte = hashString.substring(i, i + 2);
             bytes[i / 2] = (byte) (Integer.parseInt(hexByte, 16) - 128);
         }
-    
         return bytes;
     }
 
     public static String pubKeyAsString(PublicKey pubKey){
         byte[] pubKeyAsBytes = pubKey.getEncoded();
         String output = CryptographyReencoding.bytesAsString(pubKeyAsBytes);
-        // output.substring(52, 315);
-        return output; 
-    }
-    public static String pubKeyAsString2(PublicKey pubKey){
-        byte[] pubKeyAsBytes = pubKey.getEncoded();
-        String output = CryptographyReencoding.bytesAsString(pubKeyAsBytes);
-        output = output.substring(58, 315);
+
+        //Removes generic part of string to reduce size a bit
+        output = output.substring(58, 314);
         return output; 
     }
 
-    public static PublicKey stringAsPubKey(String str){
+    public static PublicKey stringAsPubKey(String input){
+        String str = "b0011fb08d8689aa06c806778d818181858083010d80b0010982010180"
+                            + input + "8283818081";
         byte[] keyBytes = CryptographyReencoding.stringAsBytes(str);
         X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory;

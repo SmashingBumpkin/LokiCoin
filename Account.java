@@ -5,24 +5,27 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 
-public class Account {
+public class Account extends Thread  {
     private int balance = 0; //Account balance
     private final PublicKey pubKey; //address of the account
     private int nonce = 0; //The nonce of the account, must always go up
     private PrivateKey privKey; //The private key of the account, used for signing transactions
 
-    //Every account which is mining needs it's own copy of the blockchain
-    //This should probably be set up as a subclass of Account...
+    //They all share a single network
+    public static Network network = new Network();
 
     Account(PublicKey pubKey, PrivateKey privKey){
+        super();
         this.pubKey = pubKey;
         this.privKey = privKey;
     }
     Account(PublicKey pubKey){
+        super();
         this.pubKey = pubKey;
     }
 
     Account(){
+        super();
         //Returns a new account with automatically generated keys
         KeyPair keys = Account.generateKeyPair();
         this.pubKey = keys.getPublic();

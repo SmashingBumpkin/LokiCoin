@@ -24,6 +24,7 @@ public class Blockchain {
 
     public void addNewBlock(Block newBlock){
         //Add block to chain
+        System.out.println("ADDing block!");
         this.blockchain.add(newBlock);
         this.lastHash = newBlock.getHash();
         this.blockchainHeight++;

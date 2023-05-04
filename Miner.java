@@ -5,19 +5,22 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.util.Date;
+import java.util.List;
 
 public class Miner extends Account{
     
     private static int prefix; //The difficulty the account is mining
     private static String prefixString; //Difficulty represented as prefix
-    public Blockchain localBlockchain = new Blockchain(prefix); //The account's local copy of the blockchain
+    public Blockchain localBlockchain; //The account's local copy of the blockchain
 
     Miner(){
         super();
+        this.localBlockchain = new Blockchain(Miner.prefix);
     }
 
     Miner(PublicKey pubKey, PrivateKey privKey){
         super(pubKey, privKey);
+        this.localBlockchain = new Blockchain(Miner.prefix);
     }
 
     public static String getPrefixString(){ return Miner.prefixString; }
@@ -34,7 +37,6 @@ public class Miner extends Account{
         //Checks the transaction's nonce is higher than the sender's
         if (account.getBalance() >= (tx.getAmount() + tx.getFee())
             && tx.getNonce() > account.getNonce()) {
-            
             //Checks the tx was correctly signed
             try {
                 Signature verifier;
@@ -55,7 +57,7 @@ public class Miner extends Account{
         }
     }
 
-    public void executeTransaction(LokiTransaction tx) throws Exception {
+    public void executeTransaction(LokiTransaction tx) {
         //updates nonce
         Account senderAccount = getAccount(tx.getSender());
         senderAccount.debitBalance(tx.getAmount() + tx.getFee());
@@ -74,6 +76,15 @@ public class Miner extends Account{
         Account rewardee = getAccount(blockRewardee);
         rewardee.creditBalance(Block.blockReward);
 
+        for (Transaction tx :block.getTransactions()){
+            try{
+                LokiTransaction lokiTx = new LokiTransaction(tx);
+                executeTransaction(lokiTx);
+            } catch (Exception e) {
+                //handle other transaction types here
+                System.out.println("Problem executing transaction:\n" + tx.getTxAsString());
+            }
+        }
         return true;
     }
 
@@ -103,12 +114,20 @@ public class Miner extends Account{
     public Boolean validateBlock(Block block, String previousHash){
         //String prefixString = new String(new char[Miner.prefix]).replace('\0', '0'); 
         //checks if a block and it's contents are valid
-        Boolean flag = block.getHash().equals(Miner.calculateBlockHash(block)) //rehashes the block to check it was hashed correctly
-        && block.getPreviousHash().equals(previousHash) //checks it follows on from the block you were expecting
-        && block.getHash().substring(0, Miner.prefix).equals(Miner.prefixString); //checks the hash is difficult enough
-
+        Boolean flag = block.getPreviousHash().equals(previousHash) //rehashes the block to check it was hashed correctly
+        && block.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
+        && block.getHash().equals(Miner.calculateBlockHash(block));  //checks it follows on from the block you were expecting
+        
         if (flag) {
             //Needs to check to see if transactions are valid
+            for (Transaction tx : block.getTransactions()){
+                try {
+                    LokiTransaction lokiTx = new LokiTransaction(tx);
+                    boolean validTx = checkTxValidity(lokiTx);
+                } catch (Exception e){
+
+                }
+            }
             //Every sender should appear at most one time
         }
         return flag;
@@ -118,6 +137,7 @@ public class Miner extends Account{
         //Check if the data is valid
         Block newBlock = new Block(data, previousHash, this.getPubKey(), blockHeight);
 
+        System.out.println("Blockchain height: " + localBlockchain.blockchainHeight);
         //creates a string with "0"*diffilculty
         String difficultyString = new String(new char[Miner.prefix]).replace('\0', '0'); 
 
@@ -179,5 +199,42 @@ public class Miner extends Account{
             System.out.println(account.returnAccountPrintable());
         }
         this.validateBlockchain();
+    }
+
+    //Each miner gets set to run, then should run continuously until they're told to stop
+    //This means continuing to build a blockchain, both by mining blocks and adding blocks from the network
+    public void run(){
+        System.out.println("Miner " + this.getPubKey().hashCode() + " starting!");
+        List<Block> potentialBlocks = Network.getPotentialBlocks();
+        if (potentialBlocks.size() > 1){
+            for (Block block : potentialBlocks) {
+
+                //TODO: Unify potential blocks with local blockchain
+                //Checks height of potential blocks
+                //Resolves to longest chain 
+                this.executeBlock(block);
+            }
+        }
+        for (int i = 0; i<3; i++){
+            //Gets the miner to mine a valid block
+            Block newBlock = this.mineBlock(  "Miner hashcode " + this.getPubKey().hashCode(), //data should go in the first field
+                                                    this.localBlockchain.getLastHash(), 
+                                                    this.localBlockchain.blockchainHeight
+                                                    );
+            //adds it to it's local blockchain
+            this.executeBlock(newBlock);
+            Network.addPotentialBlock(newBlock);
+        }
+    }
+
+    //Initializer to start a network for the first time
+    public static Miner startNewNetwork(int difficulty) {
+        Miner.setPrefix(difficulty);
+        Miner miner = new Miner();
+
+        Block genesisBlock = miner.mineBlock("The OG miner was 'ere", Miner.getPrefixString(), 0);
+        miner.executeBlock(genesisBlock);
+        Network.addPotentialBlock(genesisBlock);
+        return miner;
     }
 }
