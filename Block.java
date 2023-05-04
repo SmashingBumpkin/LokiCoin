@@ -10,7 +10,7 @@ public class Block {
     private long timeStamp; //time the block is mined
     private int nonce; //used to randomize the block hash
     private PublicKey rewardRecipient; //The miner who gets the block reward 
-                                    //(the prize for being the successfull miner)
+                                        //(the prize for being the successfull miner)
     // private static int longestChain = 0; //Needs removing
     private int blockNumber; //must be one greater than the previous block
     private List<Transaction> transactions = new ArrayList<>();

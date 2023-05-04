@@ -1,3 +1,4 @@
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,9 @@ public class Network {
     //all of the transactions that have been submitted and can be mined
     private static List<Transaction> potentialTransactions = new ArrayList<>();
     private static int numberOfPotentialTransactions = 0;
+
+    private static List<PublicKey> potentialAccounts = new ArrayList<>();
+    private static int numberOfPotentialAccounts = 0;
 
     Network(){}
 
@@ -25,7 +29,7 @@ public class Network {
     public static List<Transaction> getPotentialTransactions() {
         return Network.potentialTransactions;
     }
-    public static int numberOfPotentialTransactions() {return Network.numberOfPotentialTransactions;}
+    public static int numberOfPotentialTransactions() { return Network.numberOfPotentialTransactions; }
 
     // Adder for potentialTransactions list
     public static void addPotentialTransaction(Transaction transaction) {

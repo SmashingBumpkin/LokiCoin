@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Initializer",
+            "request": "launch",
+            "mainClass": "Initializer",
+            "projectName": "LokiCoin_ceffa477"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
