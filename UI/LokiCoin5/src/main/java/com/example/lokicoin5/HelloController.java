@@ -83,6 +83,6 @@ public class HelloController {
         File Chode = new File("/Users/jasch/Desktop/LokiCoin/PleaseWork/LokiCoin5/src/main/java/com/example/lokicoin5/HelloController.java");
         Desktop.getDesktop().open(Chode);
     }
-   
+
      */
 }
