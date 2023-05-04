@@ -121,29 +121,30 @@ public class Miner extends Account{
         && block.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
         && block.getHash().equals(Miner.calculateBlockHash(block));  //checks it follows on from the block you were expecting
         
-        if (flag) {
-            //Needs to check to see if transactions are valid
-            Set<PublicKey> senders = new HashSet<PublicKey>(); 
-            for (Transaction tx : block.getTransactions()){
-                boolean duplicateSender = senders.add(tx.getSender());
-                if (!duplicateSender){
-                    System.out.println("DUPLICATE SENDER IN BLOCK:\n " + tx.getTxAsString());
+        if (!flag) {
+            return false;
+        }
+
+        //Check to see if transactions are valid
+        Set<PublicKey> senders = new HashSet<PublicKey>(); 
+        for (Transaction tx : block.getTransactions()){
+            boolean duplicateSender = senders.add(tx.getSender());
+            if (!duplicateSender){
+                System.out.println("DUPLICATE SENDER IN BLOCK:\n " + tx.getTxAsString());
+                break;
+            }
+
+            try {
+                LokiTransaction lokiTx = new LokiTransaction(tx);
+                boolean validTx = checkTxValidity(lokiTx);
+                if (!validTx){
+                    System.out.println("INVALID TX IN BLOCK:\n " + lokiTx.getTxPrintable());
                     break;
                 }
-                
-                try {
-                    LokiTransaction lokiTx = new LokiTransaction(tx);
-                    boolean validTx = checkTxValidity(lokiTx);
-                    if (!validTx){
-                        System.out.println("INVALID TX IN BLOCK:\n " + lokiTx.getTxPrintable());
-                        break;
-                    }
-                } catch (Exception e){
-                    System.out.println("\n\nERROR PARSING LOKITX");
-                    //Try and parse tx as a different type
-                }
+            } catch (Exception e){
+                System.out.println("\n\nERROR PARSING LOKITX");
+                //Try and parse tx as a different type
             }
-            //Every sender should appear at most one time
         }
         return flag;
     }
