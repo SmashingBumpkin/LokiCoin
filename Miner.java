@@ -109,7 +109,7 @@ public class Miner extends Account{
         Boolean flag = block.getPreviousHash().equals(previousHash) //rehashes the block to check it was hashed correctly
         && block.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
         && block.getHash().equals(Miner.calculateBlockHash(block));  //checks it follows on from the block you were expecting
-        
+        //CHECK IS TIMESTAMP IS AFTER PREVIOUS BLOCK AND BEFORE CURRENT TIME
         if (!flag) {
             return false;
         }
