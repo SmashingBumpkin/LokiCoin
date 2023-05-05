@@ -18,6 +18,9 @@ public class Block {
     private List<Transaction> transactions = new ArrayList<>();
     public static final int blockReward = 100;
 
+    //EACH BLOCK SHOULD HOLD THE STATE OF ACCOUNTS AT THAT POINT IT TIME
+    //THIS CAN ALLOW A MAJOR REORDER TO BE PROPERLY CHECKED
+
     public Block(String data, String previousHash, PublicKey rewardRecipient, int blockHeight) {
         this.data = data;
         this.previousHash = previousHash;
