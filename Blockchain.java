@@ -20,7 +20,10 @@ public class Blockchain {
         this.prefixString = new String(new char[prefix]).replace('\0', '0');
     }
 
+    public int getBlockchainHeight(){ return this.blockchainHeight;}
+
     public String getLastHash(){ return this.lastHash; }
+
 
     public void addNewBlock(Block newBlock){
         //Add block to chain
