@@ -99,10 +99,11 @@ public class Miner extends Account{
     
     public Boolean validateBlock(Block block){
         String previousHash;
-        if (block.getBlockNumber() == 0){
+        
+        try {
+            previousHash = localBlockchain.blockchain.get(block.getBlockNumber() - 1).getHash();
+        } catch (Exception e){
             previousHash = prefixString;
-        } else {
-            previousHash = localBlockchain.blockchain.get(block.getBlockNumber()).getHash();
         }
         //checks if a block and it's contents are valid
         Boolean flag = block.getPreviousHash().equals(previousHash) //rehashes the block to check it was hashed correctly
@@ -159,9 +160,11 @@ public class Miner extends Account{
                 Thread.currentThread().interrupt();
             }
             newBlock.setHash(Miner.calculateBlockHash(newBlock));
+            int numberOfBlocksInNetwork = Network.getNumberOfPotentialBlocks();
             if (numberOfBlocksMinerIsAwareOf != numberOfBlocksInNetwork){
                 System.out.println("The number of blocks in the pool is: " + numberOfBlocksMinerIsAwareOf);
                 this.addBlocksFromNetwork(numberOfBlocksInNetwork - numberOfBlocksMinerIsAwareOf);
+                numberOfBlocksMinerIsAwareOf = numberOfBlocksInNetwork;
                 //TODO: Andrea
 
                 //Get any blocks that the miner was previously unaware of from the pool
@@ -178,10 +181,9 @@ public class Miner extends Account{
     public void validateBlockchain() {
         boolean flag = true;
         int errorBlock = 0;
-        String previousHash = prefixString;
         for (int i = 0; i < this.localBlockchain.blockchain.size(); i++) {
-            flag = this.validateBlock(this.localBlockchain.blockchain.get(i), previousHash);
-            previousHash = this.localBlockchain.blockchain.get(i).getHash();
+            flag = this.validateBlock(this.localBlockchain.blockchain.get(i));
+            
             if (!flag){
                 errorBlock = i;
                 break;
@@ -327,7 +329,7 @@ public class Miner extends Account{
                                                     this.localBlockchain.blockchainHeight
                                                     );
             //adds it to it's local blockchain
-            this.executeBlock(newBlock)
+            this.executeBlock(newBlock);
             newBlock.setBlockPositionInNetwork(Network.addPotentialBlock(newBlock));
             
         }
