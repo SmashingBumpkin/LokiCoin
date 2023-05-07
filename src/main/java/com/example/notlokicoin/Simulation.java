@@ -1,7 +1,9 @@
+package com.example.notlokicoin;
+
 public class Simulation {
-    public static void main(String[] args) {
+    public static void run() {
         //Used to start a new simulation
-        
+
         System.out.println("Initializing network LFG");
 
         //miner1 starts a new network
@@ -16,7 +18,7 @@ public class Simulation {
 
         miner1.start();
 
-        
+
         miner2.start();
 
         //add a loop that spams transactions for the miners to pick up
@@ -35,7 +37,7 @@ public class Simulation {
         // miner1.miner.printAccounts();
 
         long startTime = System.currentTimeMillis();
-        
+
         for (int i=0; i<4; i++){
             //TODO: Andrea
             //Accounts/miners get added to network as potential people to do a transaction
@@ -70,9 +72,10 @@ public class Simulation {
         }
 
         miner1.printAccounts();
-        
+
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
         System.out.println("The code took " + duration + " milliseconds to execute");
     }
 }
+
