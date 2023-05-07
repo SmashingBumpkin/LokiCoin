@@ -1,3 +1,5 @@
+package com.example.notlokicoin;
+
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
@@ -58,7 +60,7 @@ public class Account extends Thread  {
         this.nonce++;
         LokiTransaction lokiTransaction =  new LokiTransaction(this.getPubKey(), fee, this.nonce, recipient, amount);
         String txAsString = lokiTransaction.getTxAsString();
-        
+
         MessageDigest messageDigest;
         try {
             messageDigest = MessageDigest.getInstance("SHA-256");

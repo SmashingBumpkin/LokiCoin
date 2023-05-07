@@ -1,3 +1,5 @@
+package com.example.notlokicoin;
+
 import java.security.PublicKey;
 
 public class LokiTransaction extends Transaction {
@@ -13,7 +15,7 @@ public class LokiTransaction extends Transaction {
 
     public LokiTransaction(PublicKey sender, int fee, int nonce, PublicKey recipient, int amount, byte[] hash){
         //Generate a LokiCoin transacaction (including the hash)
-        super(sender, fee, nonce, hash); 
+        super(sender, fee, nonce, hash);
         this.recipient = recipient;
         this.amount = amount;
     }
