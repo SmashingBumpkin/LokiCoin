@@ -1,3 +1,8 @@
+package com.example.notlokicoin;
+
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
