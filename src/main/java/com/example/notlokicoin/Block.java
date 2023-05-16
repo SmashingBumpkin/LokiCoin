@@ -16,6 +16,7 @@ public class Block {
     // private static int longestChain = 0; //Needs removing
     private int blockNumber; //must be one greater than the previous block
     private int blockPositionInNetwork;
+    private int previousBlockPositionInNetwork;
     private List<Transaction> transactions = new ArrayList<>();
     public static final int blockReward = 100;
 
@@ -30,6 +31,11 @@ public class Block {
         this.rewardRecipient = rewardRecipient;
     }
 
+    public Block(String data, String previousHash, PublicKey rewardRecipient, int blockHeight, int previousBlockPositionInNetwork) {
+        this(data, previousHash, rewardRecipient, blockHeight);
+        this.previousBlockPositionInNetwork = previousBlockPositionInNetwork;
+    }
+
     //Getters & setters
     public String getHash() { return this.hash;}
     public String getPreviousHash() {return this.previousHash;}
@@ -38,6 +44,7 @@ public class Block {
     public int getNonce(){return this.nonce;}
     public int getBlockNumber(){return this.blockNumber;}
     public int getPositionInNetwork(){return this.blockPositionInNetwork;}
+    public int getPreviousPositionInNetwork(){return this.previousBlockPositionInNetwork;}
     public PublicKey getRewardRecipient(){return this.rewardRecipient;}
     public List<Transaction> getTransactions(){ return this.transactions; }
     public void setNonce(int nonce) { this.nonce = nonce; }

@@ -103,7 +103,7 @@ public class Miner extends Account{
         String previousHash;
 
         try {
-            previousHash = localBlockchain.blockchain.get(block.getBlockNumber() - 1).getHash();
+            previousHash = localBlockchain.getBlock(block.getBlockNumber() - 1).getHash();
         } catch (Exception e){
             previousHash = prefixString;
         }
@@ -242,69 +242,63 @@ public class Miner extends Account{
          *
          */
 
-        //      // loop through new potential blocks from network
-        //     // Retrieve all new potential blocks at once
-        //     List<Block> newPotentialBlocks = Network.getPotentialBlocks(numberOfNewPotentialBlocks);
+         // loop through new potential blocks from network
+         // Retrieve all new potential blocks at once
+         List<Block> newPotentialBlocks = Network.getPotentialBlocks(numberOfNewPotentialBlocks);
 
-        //     // Sort the blocks by block number in descending order
-        //     Collections.sort(newPotentialBlocks, (b1, b2) -> Integer.compare(b2.getBlockNumber(), b1.getBlockNumber()));
+         // Sort the blocks by block number in descending order
+         Collections.sort(newPotentialBlocks, (b1, b2) -> Integer.compare(b2.getBlockNumber(), b1.getBlockNumber()));
 
-        //     // Loop through the new potential blocks
-        //     for (Block block : newPotentialBlocks) {
+         // Loop through the new potential blocks
+         for (Block block : newPotentialBlocks) {
 
-        //         // check if it claims to be the next block in the miner's chain
-        //         if (block.getBlockNumber() == localBlockchain.getBlockchainHeight() + 1) {
-        //             // execute the block if it's valid and add it to the local blockchain
-        //             if (validateBlock(block)) {
-        //                 executeBlock(block);
-        //                 localBlockchain.addNewBlock(block);
-        //                 blockNetworkPositions.remove(block.getPositionInNetwork());
-        //             }
-        //         } else if (block.getBlockNumber() > localBlockchain.getBlockchainHeight()) {
-        //             // check if the potential block is longer than the current chain
-        //             int height = -1; // height of the previous block in the potential chain
-        //             List<Integer> listOfBlockPositionInNetwork = new ArrayList<>();
-        //             listOfBlockPositionInNetwork.add(block.getPositionInNetwork());
+             // check if it claims to be the next block in the miner's chain
+             if (block.getBlockNumber() == localBlockchain.getBlockchainHeight() + 1) {
+                 // execute the block if it's valid and add it to the local blockchain
+                 if (validateBlock(block)) {
+                     executeBlock(block);
+                     localBlockchain.addNewBlock(block);
+                     blockNetworkPositions.add(block.getPositionInNetwork());
+                 }
+             } else if (block.getBlockNumber() > localBlockchain.getBlockchainHeight()) {
+                 // check if the potential block is longer than the current chain
+                 // height of the previous block in the potential chain
+                 List<Integer> listOfBlockPositionInNetwork = new ArrayList<>();
+                 listOfBlockPositionInNetwork.add(block.getPositionInNetwork());
+                 Integer lastBlockPosition = block.getPreviousPositionInNetwork();
+                 Block prevBlock;
 
-        //             // iterate over the blocks from the potential chain in reverse order
-        //             while (height < 0) {
-        //                 int prevPosition = listOfBlockPositionInNetwork.get(listOfBlockPositionInNetwork.size() - 1) - 1;
-        //                 if (prevPosition < 0) break; // reached the beginning of the potential chain
+                 // iterate over the blocks from the potential chain in reverse order
+                 while (!blockNetworkPositions.contains(lastBlockPosition)) {
+                     prevBlock = Network.getBlock(lastBlockPosition);
+                     listOfBlockPositionInNetwork.add(prevBlock.getPositionInNetwork());
+                     lastBlockPosition = prevBlock.getPreviousPositionInNetwork();
+                 }
 
-        //                 Block prevBlock = Network.potentialBlocks.get(prevPosition);
-        //                 if (localBlockchain.containsBlock(prevBlock)) {
-        //                     // found the previous block in the local blockchain, so the potential chain is invalid
-        //                     break;
-        //                 } else if (blockNetworkPositions.contains(prevPosition)) {
-        //                     // found the previous block in the potential chain, so add it to the list
-        //                     listOfBlockPositionInNetwork.add(prevPosition);
-        //                 } else {
-        //                     // the previous block is not in the potential chain or the local blockchain, so the potential chain is invalid
-        //                     break;
-        //                 }
+                 int forkPoint = Network.getBlock(lastBlockPosition).getBlockNumber();
+//                 Block forkBlock = this.localBlockchain.getBlock(forkPoint);
+                 boolean validFork = true;
 
-        //                 // check if the previous block is a legitimate successor of the current block
-        //                 if (!validateBlock(prevBlock, potentialBlock.getHash())) {
-        //                     break;
-        //                 }
-
-        //                 // update height and potentialBlock for the next iteration
-        //                 height = localBlockchain.getHeight(prevBlock.getHash()) + 1;
-        //                 potentialBlock = prevBlock;
-        //             }
-
-        //             if (height >= 0) {
-        //                 // found a valid longer chain
-        //                 for (int j = listOfBlockPositionInNetwork.size() - 1; j >= 0; j--) {
-        //                     Block blockToAdd = Network.potentialBlocks.get(listOfBlockPositionInNetwork.get(j));
-        //                     if (executeBlock(blockToAdd)) {
-        //                         localBlockchain.addBlock(blockToAdd);
-        //                         blockNetworkPositions.remove(blockToAdd.getPositionInNetwork());
-        //                     }
-        //                 }
-        //             }
-        //         }
-        // }
+                 //iterates over blocks from the fork point and checks if they are valid
+                 for (int i = listOfBlockPositionInNetwork.size() - 1; i >= 0; i--) {
+                     Block nextBlock = Network.getBlock(listOfBlockPositionInNetwork.get(i));
+                     if (!validateBlock(nextBlock)){
+                         validFork = false;
+                         break;
+                     }
+                 }
+                 //if all the fork blocks are valid, the chain needs to reshuffle
+                 if (validFork){
+                     //remove all blocks from forkPoint onwards
+                     //Remove all network positions greater than position at forkPoint
+                     //Loop through and add the blocks to the network
+                     //dont forget to update the chain length variable
+                 }
+             } else {
+                 //if the blocks in the network are shorter than the current chain the loop should break
+                 break;
+             }
+         }
 
         numberOfBlocksMinerIsAwareOf += numberOfNewPotentialBlocks;
     }

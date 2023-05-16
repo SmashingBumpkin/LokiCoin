@@ -22,6 +22,10 @@ public class Network {
 
     // Getter for potentialBlocks list
     public static List<Block> getPotentialBlocks() {return Network.potentialBlocks;}
+
+    public static List<Block> getPotentialBlocks(int n) {
+        return new ArrayList<>(Network.potentialBlocks.subList(numberOfPotentialBlocks - n, numberOfPotentialBlocks));
+    }
     public static int getNumberOfPotentialBlocks() {return Network.numberOfPotentialBlocks;}
 
     // Adder for potentialBlocks list
@@ -41,5 +45,9 @@ public class Network {
     public static void addPotentialTransaction(Transaction transaction) {
         Network.potentialTransactions.add(transaction);
         Network.numberOfPotentialTransactions++;
+    }
+
+    public static Block getBlock(Integer blockPosition) {
+        return potentialBlocks.get(blockPosition);
     }
 }

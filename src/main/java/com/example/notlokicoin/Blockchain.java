@@ -26,6 +26,7 @@ public class Blockchain {
 
     public String getLastHash(){ return this.lastHash; }
 
+    public Block getBlock(int n){return blockchain.get(n);}
 
     public void addNewBlock(Block newBlock){
         //Add block to chain
