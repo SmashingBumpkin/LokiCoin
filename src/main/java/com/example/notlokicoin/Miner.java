@@ -100,25 +100,41 @@ public class Miner extends Account{
     }
 
     public Boolean validateBlock(Block block){
+        try {
+            return validateBlockPair(localBlockchain.getBlock(block.getBlockNumber() - 1), block);
+        } catch (IndexOutOfBoundsException e) {
+            if (block.getBlockNumber()==0) return true;
+            else return false;
+        }
+    }
+
+    public Boolean validateBlockPair(Block prevBlock, Block nextBlock){
         String previousHash;
 
         try {
-            previousHash = localBlockchain.getBlock(block.getBlockNumber() - 1).getHash();
+            previousHash = prevBlock.getHash();
         } catch (Exception e){
             previousHash = prefixString;
         }
         //checks if a block and it's contents are valid
-        Boolean flag = block.getPreviousHash().equals(previousHash) //rehashes the block to check it was hashed correctly
-                && block.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
-                && block.getHash().equals(Miner.calculateBlockHash(block));  //checks it follows on from the block you were expecting
-        //CHECK IS TIMESTAMP IS AFTER PREVIOUS BLOCK AND BEFORE CURRENT TIME
+        Boolean flag = nextBlock.getPreviousHash().equals(previousHash) //rehashes the block to check it was hashed correctly
+                && nextBlock.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
+                && nextBlock.getHash().equals(Miner.calculateBlockHash(nextBlock))
+                && nextBlock.getBlockNumber() == prevBlock.getBlockNumber()+1;  //checks it follows on from the block you were expecting
+        // System.out.println("Block "+ nextBlock.getBlockNumber() + " is "
+        //                     + nextBlock.getPreviousHash().equals(previousHash) //rehashes the block to check it was hashed correctly
+        //                     + nextBlock.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
+        //                     + nextBlock.getHash().equals(Miner.calculateBlockHash(nextBlock))
+        //                     + nextBlock.getBlockNumber() + (prevBlock.getBlockNumber()+1));
+
+        //TODO: CHECK IS TIMESTAMP IS AFTER PREVIOUS BLOCK AND BEFORE CURRENT TIME
         if (!flag) {
             return false;
         }
 
         //Check to see if transactions are valid
         Set<PublicKey> senders = new HashSet<PublicKey>();
-        for (Transaction tx : block.getTransactions()){
+        for (Transaction tx : nextBlock.getTransactions()){
             boolean duplicateSender = senders.add(tx.getSender());
             if (!duplicateSender){
                 System.out.println("DUPLICATE SENDER IN BLOCK:\n " + tx.getTxAsString());
@@ -140,16 +156,15 @@ public class Miner extends Account{
         return flag;
     }
 
-    public Block mineBlock(String data, String previousHash, int blockHeight){
+    // public Block mineBlock(String data, String previousHash, int blockHeight,int previousBlockPositionInNetwork){
+    public void mineBlock(String data, String previousHash, int blockHeight,int previousBlockPositionInNetwork){
         //Check if the data is valid
-        Block newBlock = new Block(data, previousHash, this.getPubKey(), blockHeight);
-
-        System.out.println("Blockchain height: " + localBlockchain.blockchainHeight);
-        //creates a string with "0"*diffilculty
+        Block newBlock = new Block(data, previousHash, this.getPubKey(), blockHeight, previousBlockPositionInNetwork);
+        //creates a string with "0"*difficulty
         String difficultyString = new String(new char[Miner.prefix]).replace('\0', '0');
 
         int numberOfBlocksMinerIsAwareOf = Network.getPotentialBlocks().size();
-
+        boolean validAdd = false;
         //loops until it finds a block hash that meets the difficulty requirement
         //The difficulty is the number of "0"s at the start of the hash.
         while (!newBlock.getHash().substring(0, Miner.prefix).equals(difficultyString)) {
@@ -164,20 +179,171 @@ public class Miner extends Account{
             newBlock.setHash(Miner.calculateBlockHash(newBlock));
             int numberOfBlocksInNetwork = Network.getNumberOfPotentialBlocks();
             if (numberOfBlocksMinerIsAwareOf != numberOfBlocksInNetwork){
-                System.out.println("The number of blocks in the pool is: " + numberOfBlocksMinerIsAwareOf);
-                this.addBlocksFromNetwork(numberOfBlocksInNetwork - numberOfBlocksMinerIsAwareOf);
+                validAdd = this.addBlocksFromNetwork(numberOfBlocksInNetwork);
                 numberOfBlocksMinerIsAwareOf = numberOfBlocksInNetwork;
-                //TODO: Andrea
-
-                //Get any blocks that the miner was previously unaware of from the pool
-                //Check the block is valid (can be added to this miners chain)
-                //Check the contents
-                //This should check the latest blocks from the pool. If they are valid and longer, stop mining and start using them
+                if (validAdd){
+                    break;
+                }
             }
         }
-        System.out.println("New block generated by " + this.getPubKey().hashCode());
+
+        if (!validAdd) {
+            newBlock.setBlockPositionInNetwork(Network.addPotentialBlock(newBlock));
+            numberOfBlocksMinerIsAwareOf++;
+            this.executeBlock(newBlock);
+            System.out.println("New block generated by " + this.getPubKey().hashCode());
+        }
         //returns valid block
-        return newBlock;
+        // return newBlock;
+    }
+
+    public boolean addBlocksFromNetwork(int numberOfBlocksInNetwork){
+        // loop through new potential blocks from network
+        // Retrieve all new potential blocks at once
+
+        List<Block> newPotentialBlocks = Network.getPotentialBlocks(numberOfBlocksMinerIsAwareOf, numberOfBlocksInNetwork);
+        // Sort the blocks by block number in descending order
+        Collections.sort(newPotentialBlocks, (b1, b2) -> Integer.compare(b2.getBlockNumber(), b1.getBlockNumber()));
+        // System.out.println(getPubKey().hashCode() + " last " + localBlockchain.getLastBlock().getBlockNumber());
+        // for (Block blk : newPotentialBlocks){
+        //     System.out.println(getPubKey().hashCode() + "  " + blk.getBlockNumber());
+        // }
+        // Loop through the new potential blocks
+        boolean validFork = false;
+        for (Block block : newPotentialBlocks) {
+            System.out.println("Miner " + getPubKey().hashCode() + " checking block #: " + block.getBlockNumber() + " from " +block.getRewardRecipient().hashCode());
+            // check if it claims to be the next block in the miner's chain
+            if (block.getBlockNumber() == localBlockchain.getBlockchainHeight()) {
+                System.out.println("and it's the next block in chain");
+                // execute the block if it's valid and add it to the local blockchain
+                if (validateBlock(block)) {
+                    executeBlock(block);
+                    validFork = true;
+                    break;
+                }
+            } else if (block.getBlockNumber() > localBlockchain.getBlockchainHeight()) {
+                System.out.println("and ahead of this chain");
+                // check if the potential block is longer than the current chain
+                // height of the previous block in the potential chain
+                List<Integer> listOfBlockPositionInNetwork = new ArrayList<>();
+                listOfBlockPositionInNetwork.add(block.getPositionInNetwork());
+                Integer lastBlockPosition = block.getPreviousPositionInNetwork();
+
+
+                // iterate over the blocks from the potential chain in reverse order
+                while (!blockNetworkPositions.contains(lastBlockPosition)) {
+                    Block prevBlock = Network.getBlock(lastBlockPosition);
+                    listOfBlockPositionInNetwork.add(prevBlock.getPositionInNetwork());
+                    lastBlockPosition = prevBlock.getPreviousPositionInNetwork();
+                }
+
+                //gets fork point from network
+                int forkPoint = Network.getBlock(lastBlockPosition).getBlockNumber();
+                validFork = true;
+
+                //iterates over blocks from the fork point and checks if they are valid
+                Block prevBlock = localBlockchain.getBlock(forkPoint);
+                for (int i = listOfBlockPositionInNetwork.size() - 1; i >= 0; i--) {
+                    Block nextBlock = Network.getBlock(listOfBlockPositionInNetwork.get(i));
+
+                    if (!validateBlockPair(prevBlock, nextBlock)){
+                        System.out.println("Block " + prevBlock.getBlockNumber() + " from miner " + prevBlock.getRewardRecipient().hashCode()
+                                + " is invalid");
+                        validFork = false;
+                        break;
+                    }
+                    prevBlock = nextBlock;
+                }
+                //if all the fork blocks are valid, the chain needs to reshuffle
+                if (validFork){
+                    System.out.println("Valid fork!! :)");
+                    //remove all blocks from forkPoint onwards
+                    List<Integer> networkPositions = localBlockchain.removeBlocksAfterBlockX(forkPoint);
+
+                    //Remove all network positions greater than position at forkPoint
+                    blockNetworkPositions.removeAll(networkPositions);
+                    //Loop through and add the blocks to the network
+                    for (int i = listOfBlockPositionInNetwork.size() - 1; i >= 0; i--) {
+                        Block nextBlock = Network.getBlock(listOfBlockPositionInNetwork.get(i));
+                        executeBlock(nextBlock);
+                    }
+                    break;
+                }
+            } else {
+                System.out.println("and it's behind this chain");
+                //if the blocks in the network are shorter than the current chain the loop should break
+                break;
+            }
+        }
+        System.out.println("\nMiner " + this.getPubKey().hashCode() + " added blocks: " + validFork);
+        numberOfBlocksMinerIsAwareOf = numberOfBlocksInNetwork;
+        return validFork;
+    }
+
+    //Each miner gets set to run, then should run continuously until they're told to stop
+    //This means continuing to build a blockchain, both by mining blocks and adding blocks from the network
+    public void run(){
+        System.out.println("Miner " + this.getPubKey().hashCode() + " starting!");
+        if (localBlockchain.getBlockchainHeight() == 0){
+            this.executeBlock(Network.getBlock(0));
+            this.numberOfBlocksMinerIsAwareOf++;
+        }
+        if (Network.getNumberOfPotentialBlocks() > this.numberOfBlocksMinerIsAwareOf){
+            System.out.println("Synchronizing with network");
+            this.addBlocksFromNetwork(Network.getNumberOfPotentialBlocks() - this.numberOfBlocksMinerIsAwareOf);
+        }
+        while (minersActive) {
+            // for (int i = 0; i<30; i++){
+            //Gets the miner to mine a valid block
+            // Block newBlock = this.mineBlock(  "Miner hashcode " + this.getPubKey().hashCode(), //data should go in the first field
+            this.mineBlock(  "Miner hashcode " + this.getPubKey().hashCode(), //data should go in the first field
+                    this.localBlockchain.getLastHash(),
+                    this.localBlockchain.getBlockchainHeight(),
+                    this.localBlockchain.getLastBlock().getPositionInNetwork()
+            );
+            //adds it to it's local blockchain
+            // newBlock.setBlockPositionInNetwork(Network.addPotentialBlock(newBlock));
+        }
+        // this.validateBlockchain();
+    }
+
+    //Initializer to start a network for the first time
+    public static Miner startNewNetwork(int difficulty) {
+        Miner.setPrefix(difficulty);
+        Miner miner = new Miner();
+
+        // Block genesisBlock = miner.mineBlock("The OG miner was 'ere", Miner.getPrefixString(), 0,-1);
+        miner.mineBlock("The OG miner was 'ere", Miner.getPrefixString(), 0,-1);
+        // genesisBlock.setBlockPositionInNetwork(Network.addPotentialBlock(genesisBlock));
+        // miner.executeBlock(genesisBlock);
+        miner.numberOfBlocksMinerIsAwareOf++;
+        return miner;
+    }
+
+    public boolean executeBlock(Block block){
+        //Checks if block is legit
+        //ads it to blockchain
+        this.localBlockchain.addNewBlock(block);
+        this.blockNetworkPositions.add(block.getPositionInNetwork());
+
+        //Credits rewardee
+        PublicKey blockRewardee = block.getRewardRecipient();
+        Account rewardee = getAccount(blockRewardee);
+        rewardee.creditBalance(Block.blockReward);
+
+        for (Transaction tx :block.getTransactions()){
+            try{
+                LokiTransaction lokiTx = new LokiTransaction(tx);
+                executeTransaction(lokiTx);
+
+                //TODO: parse transactions from block
+                //TODO: Update accounts based on the transactions
+            } catch (Exception e) {
+                //handle other transaction types here
+                System.out.println("Problem executing transaction:\n" + tx.getTxAsString());
+            }
+        }
+        return true;
     }
 
     public void validateBlockchain() {
@@ -199,10 +365,17 @@ public class Miner extends Account{
     }
 
     public void printBlockchain(){
+        System.out.println("\n\nMiner " + this.getPubKey().hashCode() + " printing blockchain:\n");
         for (Block block : this.localBlockchain.blockchain) {
             System.out.println(block.returnBlockPrintable());
         }
         this.validateBlockchain();
+    }
+
+    public void printStatus(){
+        System.out.print("Miner " + this.getPubKey().hashCode());
+        System.out.println( " has finished on block " + this.localBlockchain.getLastBlock().getBlockNumber()
+                + " mined by " + this.localBlockchain.getLastBlock().getRewardRecipient().hashCode());
     }
 
     public void printAccounts(){
@@ -210,160 +383,5 @@ public class Miner extends Account{
             System.out.println(account.returnAccountPrintable());
         }
         this.validateBlockchain();
-    }
-
-    public void addBlocksFromNetwork(int numberOfNewPotentialBlocks){
-        //TODO:
-        //Iterate through the last newPotentialBlocks and
-        //If valid and longer add them to the localBlockchain
-        /*
-         * loop through newPotentialBlocks blocks from Network
-         * Sort by longest n
-         * begin big loop
-         * Check if it claims to be the next block in the miner's chain
-         * If it does, check and utilize public boolean executeBlock(Block block){
-         * Else check if it's longer than current chain if it is,
-         *
-         * start listOfBlockPositionInNetwork = [positionOfBlock]
-         * begin loop
-         *
-         *      get the previous block position in network, n
-         *      remove it from newPotentialBlocks if it's in there
-         *      check if it's in blockNetworkPositions
-         *      if it isn't add to list and continue looping
-         * if it is get height h of block in position n
-         * localBlockchain.get(h)
-         * loop through blocks from network and check if they're legitimate successors of block h
-         * using the function public Boolean validateBlock(Block block, String previousHash){
-         *
-         * if they are, replace all blocks from position h onwards with the blocks from the network
-         * and keep mining from there
-         * end big loop
-         *
-         */
-
-         // loop through new potential blocks from network
-         // Retrieve all new potential blocks at once
-         List<Block> newPotentialBlocks = Network.getPotentialBlocks(numberOfNewPotentialBlocks);
-
-         // Sort the blocks by block number in descending order
-         Collections.sort(newPotentialBlocks, (b1, b2) -> Integer.compare(b2.getBlockNumber(), b1.getBlockNumber()));
-
-         // Loop through the new potential blocks
-         for (Block block : newPotentialBlocks) {
-
-             // check if it claims to be the next block in the miner's chain
-             if (block.getBlockNumber() == localBlockchain.getBlockchainHeight() + 1) {
-                 // execute the block if it's valid and add it to the local blockchain
-                 if (validateBlock(block)) {
-                     executeBlock(block);
-                     localBlockchain.addNewBlock(block);
-                     blockNetworkPositions.add(block.getPositionInNetwork());
-                 }
-             } else if (block.getBlockNumber() > localBlockchain.getBlockchainHeight()) {
-                 // check if the potential block is longer than the current chain
-                 // height of the previous block in the potential chain
-                 List<Integer> listOfBlockPositionInNetwork = new ArrayList<>();
-                 listOfBlockPositionInNetwork.add(block.getPositionInNetwork());
-                 Integer lastBlockPosition = block.getPreviousPositionInNetwork();
-                 Block prevBlock;
-
-                 // iterate over the blocks from the potential chain in reverse order
-                 while (!blockNetworkPositions.contains(lastBlockPosition)) {
-                     prevBlock = Network.getBlock(lastBlockPosition);
-                     listOfBlockPositionInNetwork.add(prevBlock.getPositionInNetwork());
-                     lastBlockPosition = prevBlock.getPreviousPositionInNetwork();
-                 }
-
-                 int forkPoint = Network.getBlock(lastBlockPosition).getBlockNumber();
-//                 Block forkBlock = this.localBlockchain.getBlock(forkPoint);
-                 boolean validFork = true;
-
-                 //iterates over blocks from the fork point and checks if they are valid
-                 for (int i = listOfBlockPositionInNetwork.size() - 1; i >= 0; i--) {
-                     Block nextBlock = Network.getBlock(listOfBlockPositionInNetwork.get(i));
-                     if (!validateBlock(nextBlock)){
-                         validFork = false;
-                         break;
-                     }
-                 }
-                 //if all the fork blocks are valid, the chain needs to reshuffle
-                 if (validFork){
-                     //remove all blocks from forkPoint onwards
-                     //Remove all network positions greater than position at forkPoint
-                     //Loop through and add the blocks to the network
-                     //dont forget to update the chain length variable
-                 }
-             } else {
-                 //if the blocks in the network are shorter than the current chain the loop should break
-                 break;
-             }
-         }
-
-        numberOfBlocksMinerIsAwareOf += numberOfNewPotentialBlocks;
-    }
-
-    //Each miner gets set to run, then should run continuously until they're told to stop
-    //This means continuing to build a blockchain, both by mining blocks and adding blocks from the network
-    public void run(){
-        System.out.println("Miner " + this.getPubKey().hashCode() + " starting!");
-        // List<Block> potentialBlocks = Network.getPotentialBlocks();
-        // if (potentialBlocks.size() > 1){
-        //     for (Block block : potentialBlocks) {
-
-        //         //TODO: Unify potential blocks with local blockchain
-        //         //Checks height of potential blocks
-        //         //Resolves to longest chain
-        //         this.executeBlock(block);
-        //     }
-        // }
-        // while (minersActive) {
-        for (int i = 0; i<3; i++){
-            //Gets the miner to mine a valid block
-            Block newBlock = this.mineBlock(  "Miner hashcode " + this.getPubKey().hashCode(), //data should go in the first field
-                    this.localBlockchain.getLastHash(),
-                    this.localBlockchain.blockchainHeight
-            );
-            //adds it to it's local blockchain
-            this.executeBlock(newBlock);
-            newBlock.setBlockPositionInNetwork(Network.addPotentialBlock(newBlock));
-
-        }
-    }
-
-    //Initializer to start a network for the first time
-    public static Miner startNewNetwork(int difficulty) {
-        Miner.setPrefix(difficulty);
-        Miner miner = new Miner();
-
-        Block genesisBlock = miner.mineBlock("The OG miner was 'ere", Miner.getPrefixString(), 0);
-        miner.executeBlock(genesisBlock);
-        Network.addPotentialBlock(genesisBlock);
-        return miner;
-    }
-
-    public boolean executeBlock(Block block){
-        //Checks if block is legit
-        //ads it to blockchain
-        this.localBlockchain.addNewBlock(block);
-
-        //Credits rewardee
-        PublicKey blockRewardee = block.getRewardRecipient();
-        Account rewardee = getAccount(blockRewardee);
-        rewardee.creditBalance(Block.blockReward);
-
-        for (Transaction tx :block.getTransactions()){
-            try{
-                LokiTransaction lokiTx = new LokiTransaction(tx);
-                executeTransaction(lokiTx);
-
-                //TODO: parse transactions from block
-                //TODO: Update accounts based on the transactions
-            } catch (Exception e) {
-                //handle other transaction types here
-                System.out.println("Problem executing transaction:\n" + tx.getTxAsString());
-            }
-        }
-        return true;
     }
 }
