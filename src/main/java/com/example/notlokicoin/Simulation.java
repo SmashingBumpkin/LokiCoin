@@ -8,12 +8,6 @@ public class Simulation {
 
         //miner1 starts a new network
         Miner miner1 = Miner.startNewNetwork(1);
-
-
-        //TEMPORARY - miner2 should get the data from the network and continue working on the same network
-//        Miner miner2 = Miner.startNewNetwork(1);
-
-        // Miner miner1 = new Miner();
         Miner miner2 = new Miner();
         Miner miner3 = new Miner();
         Miner miner4 = new Miner();
@@ -30,7 +24,7 @@ public class Simulation {
         //add a loop that spams transactions for the miners to pick up
 
         try{
-            Thread.sleep(10000);
+            Thread.sleep(12000);
         } catch (Exception e){
 
         }
@@ -55,6 +49,8 @@ public class Simulation {
         miner2.printStatus();
         miner1.printStatus();
         miner1.validateBlockchain();
+        Network.printStatus();
+
         // miner1.printAccounts();
 
         long startTime = System.currentTimeMillis();
@@ -92,14 +88,8 @@ public class Simulation {
 //            }
 //        }
 
-        // miner1.printAccounts();
-        // miner2.printBlockchain();
-
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
         System.out.println("The code took " + duration + " milliseconds to execute");
-
-        // Miner miner3 = new Miner();
-        // miner3.start();
     }
 }

@@ -11,16 +11,18 @@ public class Network extends Thread {
     private static List<Transaction> potentialTransactions = new ArrayList<>();
     private static int numberOfPotentialTransactions = 0;
 
-    private static List<PublicKey> potentialAccounts = new ArrayList<>();
-    private static int numberOfPotentialAccounts = 0;
+    private static List<PublicKey> accountPubKeys = new ArrayList<>();
+    private static int numberOfAccounts = 0;
 
     Network(){}
 
     // Getter for potentialBlocks list
     public synchronized static List<Block> getPotentialBlocks() {return Network.potentialBlocks;}
-
     public synchronized static List<Block> getPotentialBlocks(int start, int finish) {
         return new ArrayList<>(Network.potentialBlocks.subList(start, finish));
+    }
+    public static Block getBlock(Integer blockPosition) {
+        return potentialBlocks.get(blockPosition);
     }
     public synchronized static int getNumberOfPotentialBlocks() {return Network.numberOfPotentialBlocks;}
 
@@ -43,7 +45,21 @@ public class Network extends Thread {
         Network.numberOfPotentialTransactions++;
     }
 
-    public static Block getBlock(Integer blockPosition) {
-        return potentialBlocks.get(blockPosition);
+    public synchronized static void addAccount(PublicKey pubKey){
+        Network.accountPubKeys.add(pubKey);
+        Network.numberOfAccounts++;
+    }
+
+    public static List<PublicKey> getAccountPubKeys(){
+        return Network.accountPubKeys;
+    }
+
+    public static PublicKey getAPubKey(){
+        int randomIndex = (int) (Math.random() * Network.numberOfAccounts);
+        return Network.accountPubKeys.get(randomIndex);
+    }
+    public static void printStatus(){
+        System.out.println("There have been " + Network.numberOfPotentialBlocks + " blocks submitted and");
+        System.out.println(Network.numberOfPotentialTransactions + " transactions from " + Network.numberOfAccounts + " accounts.");
     }
 }
