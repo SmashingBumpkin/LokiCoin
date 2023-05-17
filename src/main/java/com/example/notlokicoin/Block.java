@@ -55,8 +55,7 @@ public class Block {
 
     public String returnBlockPrintable(){ //I'm pretty sure this should be a function like //def __repr__ in python
         String output = "__________\nBLOCK " + this.blockNumber + "\n\n"
-                + this.data + "\n\n" + "Hash:\n" + this.hash + "\nlast block posn:"
-                + this.getPreviousPositionInNetwork() + "\n__________";
+                + this.data + "\n\n" + "Hash:\n" + this.hash + "\n__________";
         return output;
     }
 

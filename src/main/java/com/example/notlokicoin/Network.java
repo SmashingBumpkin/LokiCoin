@@ -31,8 +31,8 @@ public class Network {
     // Adder for potentialBlocks list
     public static int addPotentialBlock(Block block) {
         Network.potentialBlocks.add(block);
-        block.setBlockPositionInNetwork(numberOfPotentialBlocks);
-        return numberOfPotentialBlocks++;
+        block.setBlockPositionInNetwork(numberOfPotentialBlocks++);
+        return numberOfPotentialBlocks;
     }
 
     // Getter for potentialTransactions list
