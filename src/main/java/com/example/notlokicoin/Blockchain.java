@@ -28,6 +28,8 @@ public class Blockchain {
 
     public Block getBlock(int n){return blockchain.get(n);}
 
+    public Block getLastBlock(){return blockchain.get(this.blockchainHeight-1);}
+
     public void addNewBlock(Block newBlock){
         //Add block to chain
         System.out.println("ADDing block!");
@@ -38,6 +40,15 @@ public class Blockchain {
 
     public void addNewAccount(Account account){
         this.accounts.put(account.getPubKey(), account);
+    }
+
+    public List<Integer> removeBlocksAfterBlockX(int x){
+        List<Integer> networkPositions = new ArrayList<>();
+        for (int i = this.getBlockchainHeight() - x; i < x; i++) {
+            networkPositions.add(blockchain.get(this.blockchainHeight).getPositionInNetwork());
+            blockchain.remove(this.blockchainHeight--);
+        }
+        return networkPositions;
     }
 
     public void exportBlockchain(){
