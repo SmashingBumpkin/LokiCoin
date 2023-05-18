@@ -1,5 +1,4 @@
 package com.example.notlokicoin;
-
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
@@ -20,6 +19,7 @@ public class Account extends Thread  {
         super();
         this.pubKey = pubKey;
         this.privKey = privKey;
+        Network.addAccount(this.pubKey);
     }
     Account(PublicKey pubKey){
         super();
@@ -32,6 +32,7 @@ public class Account extends Thread  {
         KeyPair keys = Account.generateKeyPair();
         this.pubKey = keys.getPublic();
         this.privKey = keys.getPrivate();
+        Network.addAccount(this.pubKey);
     }
 
     public int getBalance() { return this.balance; }
