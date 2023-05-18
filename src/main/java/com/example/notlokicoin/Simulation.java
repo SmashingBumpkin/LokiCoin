@@ -7,7 +7,7 @@ public class Simulation {
         //simulation parameters
         int simRuntimeMilliseconds = 1200;
         int difficulty = 1;
-        Miner.sleeptime = 10;
+        Miner.sleeptime = 2;
 
         System.out.println("Initializing network LFG");
 
