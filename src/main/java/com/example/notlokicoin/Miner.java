@@ -6,12 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Miner extends Account{
 
@@ -21,8 +16,6 @@ public class Miner extends Account{
     int numberOfBlocksMinerIsAwareOf = 0;
     public volatile static boolean minersActive = true;
     public Set<Integer> blockNetworkPositions = new HashSet<>();
-
-    private Set<Transaction> unConfirmedTransactions = new HashSet<>();
     private int lastAddedTransactionPositionInNetwork = 0;
     public static int sleeptime = 10;
 
@@ -61,6 +54,7 @@ public class Miner extends Account{
                 byte[] messageHash = messageDigest.digest(txAsString.getBytes());
                 verifier.update(messageHash);
                 return verifier.verify(tx.getHash());
+
             } catch (Exception e) {
                 // Something failed therefore invalid transaction
                 e.printStackTrace();
@@ -72,21 +66,12 @@ public class Miner extends Account{
     }
 
     public void executeTransaction(LokiTransaction tx, Block block) {
-        //updates nonce
-        Account senderAccount = block.getAccount(tx.getSender());
-        senderAccount.debitBalance(tx.getAmount() + tx.getFee());
-        Account recipientAccount = block.getAccount(tx.getRecipient());
-        recipientAccount.creditBalance(tx.getAmount());
-        senderAccount.setNonce(tx.getNonce());
-    }
-
-    public Account getAccount(PublicKey pubKey){
-        Account account = this.localBlockchain.getLastBlock().getAccount(pubKey);
-        if (account == null){
-            account = new Account(pubKey);
-            this.localBlockchain.addNewAccount(account);
+        block.debitAccount(tx.getSender(), tx.getAmount() + tx.getFee());
+        block.creditAccount(tx.getRecipient(), tx.getAmount());
+        block.setAccountNonce(tx.getSender(), tx.getNonce());
+        if (tx.getSender() == this.getPubKey()){
+            this.setNonce(tx.getNonce());
         }
-        return account;
     }
 
     public static String calculateBlockHash(Block block) { //hashes the block
@@ -114,7 +99,6 @@ public class Miner extends Account{
 
     public Boolean validateBlockPair(Block prevBlock, Block nextBlock){
         String previousHash;
-
         try {
             previousHash = prevBlock.getHash();
         } catch (Exception e){
@@ -122,44 +106,66 @@ public class Miner extends Account{
         }
         //checks if a block and it's contents are valid
         Boolean flag = nextBlock.getPreviousHash().equals(previousHash) //rehashes the block to check it was hashed correctly
-                && nextBlock.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
-                && nextBlock.getHash().equals(Miner.calculateBlockHash(nextBlock))
-                && nextBlock.getBlockNumber() == prevBlock.getBlockNumber()+1;  //checks it follows on from the block you were expecting
-        // System.out.println("Block "+ nextBlock.getBlockNumber() + " is "
-        //                     + nextBlock.getPreviousHash().equals(previousHash) //rehashes the block to check it was hashed correctly
-        //                     + nextBlock.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
-        //                     + nextBlock.getHash().equals(Miner.calculateBlockHash(nextBlock))
-        //                     + nextBlock.getBlockNumber() + (prevBlock.getBlockNumber()+1));
-
+                        && nextBlock.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
+                        && nextBlock.getHash().equals(Miner.calculateBlockHash(nextBlock))
+                        && nextBlock.getBlockNumber() == prevBlock.getBlockNumber()+1;  //checks it follows on from the block you were expecting
+//         System.out.println("Block "+ nextBlock.getBlockNumber() + " is "
+//                             + nextBlock.getPreviousHash().equals(previousHash) //rehashes the block to check it was hashed correctly
+//                             + nextBlock.getHash().substring(0, Miner.prefix).equals(Miner.prefixString) //checks the hash is difficult enough
+//                             + nextBlock.getHash().equals(Miner.calculateBlockHash(nextBlock))
+//                             + nextBlock.getBlockNumber() + (prevBlock.getBlockNumber()+1));
+//         System.out.println(nextBlock.returnBlockPrintable());
+//        System.out.println(Miner.calculateBlockHash(nextBlock));
         //TODO: CHECK IS TIMESTAMP IS AFTER PREVIOUS BLOCK AND BEFORE CURRENT TIME
         if (!flag) {
-            return flag;
+            return false;
         }
 
         //Check to see if transactions are valid
-        nextBlock.setAccounts(prevBlock.getAccounts());
+        Block tempBlock = new Block(prevBlock);
         for (Transaction tx : nextBlock.getTransactions()){
             try {
                 LokiTransaction lokiTx = new LokiTransaction(tx);
-                boolean validTx = checkTxValidity(lokiTx, nextBlock);
+                boolean validTx = checkTxValidity(lokiTx, tempBlock);
                 if (!validTx){
-                    System.out.println("INVALID TX IN BLOCK:\n " + lokiTx.getTxPrintable());
+                    System.out.println("INVALID TX IN BLOCK " + nextBlock.getBlockNumber());
+                    System.out.println(lokiTx.getTxPrintable());
+                    System.out.println(tempBlock.returnBlockPrintable());
+                    System.out.println(tempBlock.getAccount(tx.getSender()).getAccountPrintable());
+                    flag = false;
                     break;
                 }
-                executeTransaction(lokiTx, nextBlock);
+                executeTransaction(lokiTx, tempBlock);
             } catch (Exception e){
                 System.out.println("\n\nERROR PARSING LOKITX");
                 //Try and parse tx as a different type
             }
         }
-        nextBlock.setAccounts(prevBlock.getAccounts());
+        tempBlock.creditAccount(nextBlock.getRewardRecipient(),Block.blockReward);
+        for (Account account : nextBlock.getAccounts().values()){
+            if (account.getBalance() != tempBlock.getAccounts().get(account.getPubKey()).getBalance()){
+                System.out.println(account.getPubKey().hashCode());
+                System.out.println("account blnc " + account.getBalance());
+                System.out.println("tmp account blnc " + tempBlock.getAccounts().get(account.getPubKey()).getBalance());
+                flag = false;
+                break;
+            }
+        }
+//        nextBlock.setAccounts(prevBlock.getAccounts());
         return flag;
     }
 
     // public Block mineBlock(String data, String previousHash, int blockHeight,int previousBlockPositionInNetwork){
-    public void mineBlock(String data, String previousHash, int blockHeight,int previousBlockPositionInNetwork){
+    public void mineBlock(String data, String previousHash, int blockHeight, int previousBlockPositionInNetwork){
         //Check if the data is valid
-        Block newBlock = new Block(data, previousHash, this.getPubKey(), blockHeight, previousBlockPositionInNetwork);
+        Block newBlock;
+        try {
+            newBlock = new Block(data, previousHash, this.getPubKey(), blockHeight, previousBlockPositionInNetwork,
+                    localBlockchain.getBlock(blockHeight - 1).getAccounts());
+        } catch (IndexOutOfBoundsException e){
+            newBlock = new Block(data, previousHash, this.getPubKey(), blockHeight, previousBlockPositionInNetwork,
+                    null);
+        }
         //creates a string with "0"*difficulty
         String difficultyString = new String(new char[Miner.prefix]).replace('\0', '0');
         List<Transaction> transactions = new ArrayList<>();
@@ -170,9 +176,23 @@ public class Miner extends Account{
         }
         //This line can be uncommented in which will cause more forks to happen
 //        int numberOfBlocksMinerIsAwareOf = Network.getPotentialBlocks().size();
-        boolean validAdd = false;
-        //loops until it finds a block hash that meets the difficulty requirement
+        System.out.println(getPubKey().hashCode() + " number of transactions: " + transactions.size());
+        for (Transaction tx : transactions){
+            try {
+                LokiTransaction lokiTx = new LokiTransaction(tx);
+                if (this.checkTxValidity(lokiTx, newBlock)) {
+                    executeTransaction(lokiTx, newBlock);
+                    System.out.println("Valid LokiTx execution");
+                    newBlock.addTransaction(tx);
+                }
+            } catch(Exception e){
+                System.out.println("Invalid LokiTx type");
+            }
+        }
+
+        //loops until it finds a block hash that meets the difficulty requirement, or finds a block on the network
         //The difficulty is the number of "0"s at the start of the hash.
+        boolean validAdd = false;
         while (!newBlock.getHash().substring(0, Miner.prefix).equals(difficultyString)) {
             newBlock.setNonce(newBlock.getNonce()+1); //iterates nonce to force the hash to change
             //Nerfed mining algorithm, stops it from just wasting CPU power/levels playing field
@@ -185,7 +205,6 @@ public class Miner extends Account{
             newBlock.setHash(Miner.calculateBlockHash(newBlock));
             int numberOfBlocksInNetwork = Network.getNumberOfPotentialBlocks();
             if (this.numberOfBlocksMinerIsAwareOf != numberOfBlocksInNetwork){
-                System.out.println(this.numberOfBlocksMinerIsAwareOf + " "+ Network.getNumberOfPotentialBlocks());
                 validAdd = this.addBlocksFromNetwork(numberOfBlocksInNetwork);
                 this.numberOfBlocksMinerIsAwareOf = numberOfBlocksInNetwork;
                 if (validAdd){
@@ -195,9 +214,10 @@ public class Miner extends Account{
         }
 
         if (!validAdd) {
-            newBlock.setBlockPositionInNetwork(Network.addPotentialBlock(newBlock));
-            this.numberOfBlocksMinerIsAwareOf++;
+            newBlock.creditAccount(this.getPubKey(),Block.blockReward);
+            newBlock.setBlockPositionInNetwork(Network.addPotentialBlock(new Block(newBlock)));
             this.executeBlock(newBlock);
+            this.numberOfBlocksMinerIsAwareOf++;
             System.out.println("Block " + newBlock.getBlockNumber() +" generated by " + this.getPubKey().hashCode());
         }
     }
@@ -209,13 +229,9 @@ public class Miner extends Account{
         List<Block> newPotentialBlocks = Network.getPotentialBlocks(numberOfBlocksMinerIsAwareOf, numberOfBlocksInNetwork);
         // Sort the blocks by block number in descending order
         Collections.sort(newPotentialBlocks, (b1, b2) -> Integer.compare(b2.getBlockNumber(), b1.getBlockNumber()));
-        // System.out.println(getPubKey().hashCode() + " last " + localBlockchain.getLastBlock().getBlockNumber());
-        // for (Block blk : newPotentialBlocks){
-        //     System.out.println(getPubKey().hashCode() + "  " + blk.getBlockNumber());
-        // }
-        // Loop through the new potential blocks
         boolean validFork = false;
-        for (Block block : newPotentialBlocks) {
+        for (Block networkBlock : newPotentialBlocks) {
+            Block block = new Block(networkBlock);
             int blockNum = block.getBlockNumber();
             int chainHeight = localBlockchain.getBlockchainHeight();
             System.out.println("Miner "+getPubKey().hashCode()+" checking block # "+blockNum+" from "+block.getRewardRecipient().hashCode());
@@ -249,12 +265,12 @@ public class Miner extends Account{
                 validFork = true;
 
                 //iterates over blocks from the fork point and checks if they are valid
-                Block prevBlock = localBlockchain.getBlock(forkPoint);
+                Block prevBlock = new Block(localBlockchain.getBlock(forkPoint));
                 for (int i = listOfBlockPositionInNetwork.size() - 1; i >= 0; i--) {
-                    Block nextBlock = Network.getBlock(listOfBlockPositionInNetwork.get(i));
+                    Block nextBlock = new Block(Network.getBlock(listOfBlockPositionInNetwork.get(i)));
 
                     if (!validateBlockPair(prevBlock, nextBlock)){
-                        System.out.println("Block " + prevBlock.getBlockNumber() + " from miner " + prevBlock.getRewardRecipient().hashCode()
+                        System.out.println("Block " + nextBlock.getBlockNumber() + " from miner " + nextBlock.getRewardRecipient().hashCode()
                                 + " is invalid");
                         validFork = false;
                         break;
@@ -271,7 +287,7 @@ public class Miner extends Account{
                     blockNetworkPositions.removeAll(networkPositions);
                     //Loop through and add the blocks to the network
                     for (int i = listOfBlockPositionInNetwork.size() - 1; i >= 0; i--) {
-                        Block nextBlock = Network.getBlock(listOfBlockPositionInNetwork.get(i));
+                        Block nextBlock = new Block(Network.getBlock(listOfBlockPositionInNetwork.get(i)));
                         executeBlock(nextBlock);
                     }
                     break;
@@ -326,27 +342,26 @@ public class Miner extends Account{
 
     public boolean executeBlock(Block block){
         //Checks if block is legit
-        //ads it to blockchain
-        this.localBlockchain.addNewBlock(block);
-        this.blockNetworkPositions.add(block.getPositionInNetwork());
 
         //Credits rewardee
-        PublicKey blockRewardee = block.getRewardRecipient();
-        Account rewardee = getAccount(blockRewardee);
-        rewardee.creditBalance(Block.blockReward);
-
-        for (Transaction tx :block.getTransactions()){
-            try{
-                LokiTransaction lokiTx = new LokiTransaction(tx);
-                executeTransaction(lokiTx, block);
-
-                //TODO: parse transactions from block
-                //TODO: Update accounts based on the transactions
-            } catch (Exception e) {
-                //handle other transaction types here
-                System.out.println("Problem executing transaction:\n" + tx.getTxAsString());
-            }
-        }
+//        block.creditAccount(block.getRewardRecipient(), Block.blockReward);
+//        try {
+//            block.setAccounts(localBlockchain.getLastBlock().getAccounts());
+//        } catch (IndexOutOfBoundsException e){
+//            //first block
+//        }
+//        for (Transaction tx :block.getTransactions()){
+//            try{
+//                LokiTransaction lokiTx = new LokiTransaction(tx);
+//                executeTransaction(lokiTx, block);
+//            } catch (Exception e) {
+//                //handle other transaction types here
+//                System.out.println("Problem executing transaction:\n" + tx.getTxAsString());
+//            }
+//        }
+        //adds it to blockchain
+        this.localBlockchain.addNewBlock(new Block(block));
+        this.blockNetworkPositions.add(block.getPositionInNetwork());
         return true;
     }
 
@@ -383,9 +398,7 @@ public class Miner extends Account{
     }
 
     public void printAccounts(){
-        for (Account account : this.localBlockchain.getLastBlock().getAccounts().values()) {
-            System.out.println(account.returnAccountPrintable());
-        }
+        this.localBlockchain.getLastBlock().printAccounts();
         this.validateBlockchain();
     }
 }

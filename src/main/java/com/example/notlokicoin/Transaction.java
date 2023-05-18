@@ -31,6 +31,11 @@ public class Transaction {
         //this(sender, receiver, amount, fee, nonce, hash);
     }
 
+    public Transaction(Transaction tx) {
+        this(tx.getSender(), tx.getFee(), tx.getNonce(), tx.getHash());
+        this.data = tx.getData();
+    }
+
     public PublicKey getSender() {return sender;}
     public int getNonce() {return nonce;}
     public int getFee() {return fee;}
