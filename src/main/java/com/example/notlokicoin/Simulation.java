@@ -5,7 +5,7 @@ public class Simulation {
         //Used to start a new simulation
 
         //simulation parameters
-        int simRuntimeMilliseconds = 500;
+        int simRuntimeMilliseconds = 5000;
         int difficulty = 1;
         Miner.sleeptime = 10;
 
