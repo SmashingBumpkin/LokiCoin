@@ -35,10 +35,6 @@ public class Blockchain {
         this.blockchainHeight = newBlock.getBlockNumber()+1;
     }
 
-    public void addNewAccount(Account account){
-        this.getLastBlock().addAccount(account);
-    }
-
     public List<Integer> removeBlocksAfterBlockX(int x){
         System.out.println("Blockchain has height " + this.blockchainHeight + " and is removing all elements from height: " + x );
         List<Integer> networkPositions = new ArrayList<>();

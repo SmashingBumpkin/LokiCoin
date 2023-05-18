@@ -17,11 +17,10 @@ public class Network extends Thread {
     Network(){}
 
     // Getter for potentialBlocks list
-    public synchronized static List<Block> getPotentialBlocks() {return Network.potentialBlocks;}
     public synchronized static List<Block> getPotentialBlocks(int start, int finish) {
         return new ArrayList<>(Network.potentialBlocks.subList(start, finish));
     }
-    public static Block getBlock(Integer blockPosition) {
+    public synchronized static Block getBlock(Integer blockPosition) {
         return potentialBlocks.get(blockPosition);
     }
     public synchronized static int getNumberOfPotentialBlocks() {return Network.numberOfPotentialBlocks;}
@@ -34,11 +33,10 @@ public class Network extends Thread {
     }
 
     // Getter for potentialTransactions list
-    public synchronized static List<Transaction> getPotentialTransactions() {
-        return Network.potentialTransactions;
+    public synchronized static int getNumberOfPotentialTransactions() { return Network.numberOfPotentialTransactions; }
+    public synchronized static List<Transaction> getPotentialTransactions(int start, int finish) {
+        return new ArrayList<>(Network.potentialTransactions.subList(start, finish));
     }
-    public synchronized static int numberOfPotentialTransactions() { return Network.numberOfPotentialTransactions; }
-
     // Adder for potentialTransactions list
     public synchronized static void addPotentialTransaction(Transaction transaction) {
         Network.potentialTransactions.add(transaction);
