@@ -9,7 +9,6 @@ import java.util.Map;
 public class Blockchain {
 
     public List<Block> blockchain = new ArrayList<>();
-    public Map<PublicKey, Account> accounts = new HashMap<>();
     public int prefix; //difficulty of the blockchain
     public String prefixString; //difficulty as a string prefix
     public String lastHash; //The most recent block hash
@@ -37,18 +36,16 @@ public class Blockchain {
     }
 
     public void addNewAccount(Account account){
-        this.accounts.put(account.getPubKey(), account);
+        this.getLastBlock().addAccount(account);
     }
 
     public List<Integer> removeBlocksAfterBlockX(int x){
-        System.out.println("Blockchain has reported height " + this.blockchainHeight + " atually is " + this.blockchain.size() +
-                " and removing last elements from height: " + x );
+        System.out.println("Blockchain has height " + this.blockchainHeight + " and is removing all elements from height: " + x );
         List<Integer> networkPositions = new ArrayList<>();
         for (int i = this.getBlockchainHeight(); i > x+1; i--) {
             networkPositions.add(blockchain.get(--this.blockchainHeight).getPositionInNetwork());
             blockchain.remove(this.blockchainHeight);
         }
-        System.out.println("Now blockchain has height " + this.blockchainHeight);
         return networkPositions;
     }
 

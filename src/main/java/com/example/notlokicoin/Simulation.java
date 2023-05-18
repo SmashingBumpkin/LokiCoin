@@ -4,10 +4,15 @@ public class Simulation {
     public static void run() {
         //Used to start a new simulation
 
+        //simulation parameters
+        int simRuntimeMilliseconds = 1200;
+        int difficulty = 1;
+        Miner.sleeptime = 10;
+
         System.out.println("Initializing network LFG");
 
         //miner1 starts a new network
-        Miner miner1 = Miner.startNewNetwork(1);
+        Miner miner1 = Miner.startNewNetwork(difficulty);
         Miner miner2 = new Miner();
         Miner miner3 = new Miner();
         Miner miner4 = new Miner();
@@ -24,7 +29,7 @@ public class Simulation {
         //add a loop that spams transactions for the miners to pick up
 
         try{
-            Thread.sleep(12000);
+            Thread.sleep(simRuntimeMilliseconds);
         } catch (Exception e){
 
         }
@@ -51,43 +56,43 @@ public class Simulation {
         miner1.validateBlockchain();
         Network.printStatus();
 
-        // miner1.printAccounts();
+         miner1.printAccounts();
 
         long startTime = System.currentTimeMillis();
 
-//        for (int i=0; i<4; i++){
-//            //TODO: Andrea
-//            //Accounts/miners get added to network as potential people to do a transaction
-//
-//            //Write a loop that sends a  transaction from one random account to random another
-//            //Keeps looping and adding the transactions
-//            //Add a time so they don't get created TOO quickly
-//
-//            //Relevant classes: Account, Network, Miner, LokiTransacion
-//
-//            LokiTransaction tx = miner1.generateLokiTransaction(miner2.getPubKey(), 100, 5);
-//            System.out.println(tx.getTxPrintable());
-//            try {
-//                if (miner1.checkTxValidity(tx)){
-//                    miner1.executeTransaction(tx);
-//                }
-//            } catch (Exception e) {
-//                System.out.println("Invalid tx");
-//            }
-//        }
-//
-//        for (int i=0; i<0; i++){
-//            LokiTransaction tx = miner2.generateLokiTransaction(miner1.getPubKey(), 20, 5);
-//            System.out.println(tx.getTxPrintable());
-//            try {
-//                if (miner1.checkTxValidity(tx)){
-//                    miner1.executeTransaction(tx);
-//                }
-//            } catch (Exception e) {
-//                System.out.println("Invalid tx");
-//            }
-//        }
+        for (int i=0; i<4; i++){
+            //TODO: Andrea
+            //Accounts/miners get added to network as potential people to do a transaction
 
+            //Write a loop that sends a  transaction from one random account to random another
+            //Keeps looping and adding the transactions
+            //Add a time so they don't get created TOO quickly
+
+            //Relevant classes: Account, Network, Miner, LokiTransacion
+
+            LokiTransaction tx = miner1.generateLokiTransaction(miner2.getPubKey(), 199, 5);
+//            System.out.println(tx.getTxPrintable());
+            try {
+                if (miner1.checkTxValidity(tx,miner1.localBlockchain.getLastBlock())){
+                    miner1.executeTransaction(tx,miner1.localBlockchain.getLastBlock());
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid tx");
+            }
+        }
+
+        for (int i=0; i<5; i++){
+            LokiTransaction tx = miner2.generateLokiTransaction(miner1.getPubKey(), 19, 5);
+//            System.out.println(tx.getTxPrintable());
+            try {
+                if (miner1.checkTxValidity(tx, miner1.localBlockchain.getLastBlock())){
+                    miner1.executeTransaction(tx, miner1.localBlockchain.getLastBlock());
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid tx");
+            }
+        }
+        miner1.printAccounts();
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
         System.out.println("The code took " + duration + " milliseconds to execute");
