@@ -53,4 +53,3 @@ public class CryptographyReencoding {
         return pubKey;
     }
 }
-

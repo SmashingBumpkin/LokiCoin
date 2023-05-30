@@ -1,9 +1,7 @@
 package com.example.notlokicoin;
 import java.security.PublicKey;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Network extends Thread {
     // all of the blocks that have been submitted and can be mined
@@ -11,21 +9,18 @@ public class Network extends Thread {
     private static int numberOfPotentialBlocks = 0;
     //all of the transactions that have been submitted and can be mined
     private static List<Transaction> potentialTransactions = new ArrayList<>();
-    private static int numberOfPotentialTransactions = 0;
+    public static int numberOfPotentialTransactions = 0;
 
     private static List<PublicKey> accountPubKeys = new ArrayList<>();
     public static int numberOfAccounts = 0;
-    //public static List<Account> NPCs = new ArrayList<>();
-    //let me cook
-    /////
+
     Network(){}
 
     // Getter for potentialBlocks list
-    public synchronized static List<Block> getPotentialBlocks() {return Network.potentialBlocks;}
     public synchronized static List<Block> getPotentialBlocks(int start, int finish) {
         return new ArrayList<>(Network.potentialBlocks.subList(start, finish));
     }
-    public static Block getBlock(Integer blockPosition) {
+    public synchronized static Block getBlock(Integer blockPosition) {
         return potentialBlocks.get(blockPosition);
     }
     public synchronized static int getNumberOfPotentialBlocks() {return Network.numberOfPotentialBlocks;}
@@ -38,11 +33,10 @@ public class Network extends Thread {
     }
 
     // Getter for potentialTransactions list
-    public synchronized static List<Transaction> getPotentialTransactions() {
-        return Network.potentialTransactions;
+    public synchronized static int getNumberOfPotentialTransactions() { return Network.numberOfPotentialTransactions; }
+    public synchronized static List<Transaction> getPotentialTransactions(int start, int finish) {
+        return new ArrayList<>(Network.potentialTransactions.subList(start, finish));
     }
-    public synchronized static int numberOfPotentialTransactions() { return Network.numberOfPotentialTransactions; }
-
     // Adder for potentialTransactions list
     public synchronized static void addPotentialTransaction(Transaction transaction) {
         Network.potentialTransactions.add(transaction);

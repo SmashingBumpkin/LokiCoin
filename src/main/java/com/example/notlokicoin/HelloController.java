@@ -281,25 +281,26 @@ public class HelloController {
         //Balance
 
         String emptys = "";
-        for (Miner Trump : simcity.minerArray) {
+        for (int i=0; i<simcity.minerArray.size(); i++) {
+            Miner Trump = simcity.minerArray.get(i);
             if (simcity.minerArray.contains(Trump)){emptys+="Miner ";}
             emptys += "Address "+ Trump.getPubKey().hashCode() + "has Balance " + Trump.getBalance() + "\n";
         }
-        //transDets.setText(emptys);
+        transDets.setText(emptys);
 
         //finaldis.setText(simcity.miner1.printAccounts2());
 
 
         //Trans
         String PrintStringy = "";
-        List<Transaction> jjj = Network.getPotentialTransactions();
-        for (int i = 0; i < Network.numberOfPotentialTransactions(); i++) {
+        List<Transaction> jjj = Network.getPotentialTransactions(0, Network.getNumberOfPotentialTransactions());
+        for (int i = 0; i < Network.getNumberOfPotentialTransactions(); i++) {
             LokiTransaction xxtx = new LokiTransaction(jjj.get(i));
             PrintStringy = PrintStringy + "Sender: " + (xxtx.getSender().hashCode()) + " Fee: " + xxtx.getFee()
                     + "   Nonce: " + xxtx.getNonce() + " Recipient: " + (xxtx.getRecipient().hashCode())
                     + " Amount: " + xxtx.getAmount() + "\n";
         }
-        transDets.setText(PrintStringy);
+        //transDets.setText(PrintStringy);
     }
 
 
