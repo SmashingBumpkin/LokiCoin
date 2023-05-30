@@ -1,12 +1,8 @@
 package com.example.notlokicoin;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Simulation {
     public Miner miner1 = Miner.startNewNetwork(1);
@@ -16,9 +12,8 @@ public class Simulation {
     public Miner miner5 = new Miner();
     public Miner miner6 = new Miner();
     public Random R = new Random();
-    public ObservableList<Miner> minerArray = FXCollections.observableArrayList();
-    public List <Account> allArray = new CopyOnWriteArrayList<>();
-    public List <Account> accArray = new CopyOnWriteArrayList<>();
+    public List <Miner> minerArray = new ArrayList<>();
+    public List <Account> accArray = new ArrayList<>();
 
     public void run() {
         //Used to start a new simulation
@@ -28,7 +23,7 @@ public class Simulation {
         this.minerArray.add(miner4);
         this.minerArray.add(miner5);
         this.minerArray.add(miner6);
-        //for (Miner m : minerArray){this.accArray.add(m);}
+        for (Miner m : minerArray){this.accArray.add(m);}
         //simulation parameters
         int simRuntimeMilliseconds = 1200;
         int difficulty = 1;
@@ -69,32 +64,31 @@ public class Simulation {
 
         Thread makeNPCs = new Thread(() -> {
             while (Miner.minersActive == true){
-            Account NPC = new Account();
-            allArray.add(NPC);
-            accArray.add(NPC);
-            //Network.addAccount(NPC.getPubKey());
-            //NPC.run();
-            try{
-                Thread.sleep(R.nextInt(1000,5000));
-            } catch (Exception e){
-            }}});
+                Account NPC = new Account();
+                accArray.add(NPC);
+                //Network.addAccount(NPC.getPubKey());
+                NPC.run();
+                try{
+                    Thread.sleep(R.nextInt(1000,5000));
+                } catch (Exception e){
+                }}});
         makeNPCs.start();
-        /*
+
         Thread makeDrones = new Thread(()->{
-           while (Miner.minersActive == true){
-               Miner drone = new Miner();
-               minerArray.add(drone);
-               allArray.add(drone);
-               drone.start();
-               try{
-                   Thread.sleep(R.nextInt(1000,5000));
-               } catch (Exception e){
-               }}});
+            while (Miner.minersActive == true){
+                Miner Drone = new Miner();
+                minerArray.add(Drone);
+                accArray.add(Drone);
+                Drone.start();
+                try{
+                    Thread.sleep(R.nextInt(1000,5000));
+                } catch (Exception e){
+                }}});
         makeDrones.start();
-        */
+
         while (Miner.minersActive == true){
             //Random R = new Random();
-            Account x = minerArray.get(R.nextInt(minerArray.size()));
+            Account x = accArray.get(R.nextInt(accArray.size()));
             Account y = accArray.get(R.nextInt(accArray.size()));
             //Miner x = minerArray[R.nextInt(6)];
             //Miner y = minerArray[R.nextInt(6)];
@@ -126,7 +120,7 @@ public class Simulation {
         }
 
         //Miner.minersActive = false;
-        //for (Miner m : minerArray){this.accArray.add(m);}
+
         try {
             for (Miner m : minerArray){m.join();}
             /*

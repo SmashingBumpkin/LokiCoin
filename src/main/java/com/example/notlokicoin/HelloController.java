@@ -27,6 +27,7 @@ import java.awt.Desktop;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -239,9 +240,11 @@ public class HelloController {
                 //String blockDetails6 = "Block Validation: " + simcity.miner6.flag + System.lineSeparator();
                 //Platform.runLater(() -> miner6dets.setText(blockDetails6));
 
+                for (Account uwu : simcity.miner3.localBlockchain.getLastBlock().getAccounts().values()){
+                    int xValue = uwu.getBalance();
+                    Platform.runLater(() -> TestJ.setText(String.valueOf(xValue)));
+                };
 
-                int xValue = Network.numberOfAccounts;
-                Platform.runLater(() -> TestJ.setText(String.valueOf(xValue)));
 
                 try {
                     Thread.sleep(1); // Update every second (adjust as needed)
@@ -277,20 +280,6 @@ public class HelloController {
         });
         changethings.start();
 
-        //Miner.minersActive = false;
-        //Balance
-
-        String emptys = "";
-        for (int i=0; i<simcity.minerArray.size(); i++) {
-            Miner Trump = simcity.minerArray.get(i);
-            if (simcity.minerArray.contains(Trump)){emptys+="Miner ";}
-            emptys += "Address "+ Trump.getPubKey().hashCode() + "has Balance " + Trump.getBalance() + "\n";
-        }
-        transDets.setText(emptys);
-
-        //finaldis.setText(simcity.miner1.printAccounts2());
-
-
         //Trans
         String PrintStringy = "";
         List<Transaction> jjj = Network.getPotentialTransactions(0, Network.getNumberOfPotentialTransactions());
@@ -300,7 +289,7 @@ public class HelloController {
                     + "   Nonce: " + xxtx.getNonce() + " Recipient: " + (xxtx.getRecipient().hashCode())
                     + " Amount: " + xxtx.getAmount() + "\n";
         }
-        //transDets.setText(PrintStringy);
+        transDets.setText(PrintStringy);
     }
 
 

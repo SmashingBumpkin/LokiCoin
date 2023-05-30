@@ -7,7 +7,7 @@ import java.security.PublicKey;
 import java.security.Signature;
 
 public class Account extends Thread  {
-    public int balance = 0; //Account balance
+    private int balance = 0; //Account balance
     private final PublicKey pubKey; //address of the account
     private int nonce = 0; //The nonce of the account, must always go up
     private PrivateKey privKey; //The private key of the account, used for signing transactions
