@@ -1,7 +1,5 @@
 package com.example.lokicoin.blockchain;
 
-import com.example.lokicoin.CryptographyReencoding;
-
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

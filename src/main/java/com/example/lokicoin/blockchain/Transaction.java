@@ -1,7 +1,5 @@
 package com.example.lokicoin.blockchain;
 
-import com.example.lokicoin.CryptographyReencoding;
-
 import java.security.PublicKey;
 
 public class Transaction {
