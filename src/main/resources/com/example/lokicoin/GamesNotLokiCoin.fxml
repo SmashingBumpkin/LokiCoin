@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.lokicoin.GUIController">
+   <children>
+      <AnchorPane layoutX="312.0" layoutY="150.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffdab9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+         <children>
+            <Button layoutX="74.0" layoutY="277.0" mnemonicParsing="false" onAction="#PlayXand0" style="-fx-background-color: #8b4513;" text="Tic-Tac-Toe" textFill="IVORY">
+               <font>
+                  <Font name="Muna Regular" size="18.0" />
+               </font>
+            </Button>
+            <Button layoutX="363.0" layoutY="277.0" mnemonicParsing="false" onAction="#PlayShatranj" style="-fx-background-color: #8b4513;" text="Chess" textFill="IVORY">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button layoutX="623.0" layoutY="275.0" mnemonicParsing="false" onAction="#RickRoll" style="-fx-background-color: #8b4513;" text="Minecraft" textFill="IVORY">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="62.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Images/TicTacToe.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="297.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Images/Chess.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="570.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@Images/Minecraft.png" />
+               </image>
+            </ImageView>
+            <Button layoutX="707.0" layoutY="360.0" mnemonicParsing="false" onAction="#ViewCode" style="-fx-background-color: #ffdab9;" text="View Code " textFill="#0004ff" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="4.0" layoutY="4.0" prefHeight="100.0" prefWidth="800.0" style="-fx-background-color: #008b8b;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="LokiCoinimg" fitHeight="100.0" fitWidth="200.0" layoutX="93.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0">
+               <image>
+                  <Image url="@Images/loki.png" />
+               </image>
+            </ImageView>
+            <Button layoutX="150.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoHome" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: #008b8b;" text="Home" textFill="IVORY">
+               <font>
+                  <Font name="Muna Regular" size="24.0" />
+               </font>
+            </Button>
+            <Button layoutX="340.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoSim" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: #008b8b;" text="Sim" textFill="IVORY">
+               <font>
+                  <Font name="Muna Regular" size="24.0" />
+               </font>
+            </Button>
+            <Button layoutX="530.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoGames" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: #008b8b;" text="Games" textFill="IVORY">
+               <font>
+                  <Font name="Muna Regular" size="24.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
