@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Simulation {
-    int difficulty = 1;
+    int difficulty = 2;
     public Miner miner1 = Miner.startNewNetwork(difficulty);
     public Miner miner2 = new Miner();
     public Miner miner3 = new Miner();
@@ -17,9 +17,6 @@ public class Simulation {
     public List <Account> accArray = new ArrayList<>();
     public void run() {
         //Used to start a new simulation
-
-        //simulation parameters
-        int simRuntimeMilliseconds = 3000;
         Miner.sleeptime = 10;
 
         //Used to start a new simulation
@@ -73,14 +70,6 @@ public class Simulation {
             Transaction tx = lokiTx.lokiToGenericTransaction();
             Network.addPotentialTransaction(tx);
         }
-
-        try{
-            Thread.sleep(simRuntimeMilliseconds);
-        } catch (Exception e){
-
-        }
-
-        Miner.minersActive = false;
 
         try {
             for (Miner m : minerArray){m.join();}

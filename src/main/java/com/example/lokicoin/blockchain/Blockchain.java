@@ -34,7 +34,6 @@ public class Blockchain {
     }
 
     public List<Integer> removeBlocksAfterBlockX(int x){
-        System.out.println("Blockchain has height " + this.blockchainHeight + " and is removing all elements from height: " + x );
         List<Integer> networkPositions = new ArrayList<>();
         for (int i = this.getBlockchainHeight(); i > x+1; i--) {
             networkPositions.add(blockchain.get(--this.blockchainHeight).getPositionInNetwork());
