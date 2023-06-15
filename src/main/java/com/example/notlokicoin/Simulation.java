@@ -43,7 +43,6 @@ public class Simulation {
                 Account NPC = new Account();
                 accArray.add(NPC);
                 Network.addAccount(NPC.getPubKey());
-//                NPC.run();
                 try{
                     Thread.sleep(R.nextInt(500,2000));
                 } catch (Exception e){
@@ -62,14 +61,15 @@ public class Simulation {
                 }}});
         makeDrones.start();
 
-        while (Miner.minersActive){
+//        while (Miner.minersActive){
+        for (int i = 0; i<100; i++){
             try{
                 Thread.sleep(100);
             } catch (Exception e){
             }
             Account sender = accArray.get(R.nextInt(accArray.size()));
             Account receiver = accArray.get(R.nextInt(accArray.size()));
-            LokiTransaction lokiTx = sender.generateLokiTransaction(receiver.getPubKey(), 1, 0);
+            LokiTransaction lokiTx = sender.generateLokiTransaction(receiver.getPubKey(), R.nextInt(100), R.nextInt(5));
             Transaction tx = lokiTx.lokiToGenericTransaction();
             Network.addPotentialTransaction(tx);
         }

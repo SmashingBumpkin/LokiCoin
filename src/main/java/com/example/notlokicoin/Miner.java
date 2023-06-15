@@ -152,6 +152,7 @@ public class Miner extends Account{
     public void mineBlock(String data, String previousHash, int blockHeight, int previousBlockPositionInNetwork){
         //Check if the data is valid
         Block newBlock;
+        Random R = new Random();
         try {
             newBlock = new Block(data, previousHash, this.getPubKey(), blockHeight, previousBlockPositionInNetwork,
                     localBlockchain.getBlock(blockHeight - 1).getAccounts());
@@ -196,7 +197,9 @@ public class Miner extends Account{
             }
             newBlock.setHash(Miner.calculateBlockHash(newBlock));
             int numberOfBlocksInNetwork = Network.getNumberOfPotentialBlocks();
-            if (this.numberOfBlocksMinerIsAwareOf != numberOfBlocksInNetwork){
+            int checkNetworkRandom = R.nextInt();
+            if (this.numberOfBlocksMinerIsAwareOf != numberOfBlocksInNetwork
+                && R.nextInt(500) <= 20){
                 validAdd = this.addBlocksFromNetwork(numberOfBlocksInNetwork);
                 this.numberOfBlocksMinerIsAwareOf = numberOfBlocksInNetwork;
                 if (validAdd){
