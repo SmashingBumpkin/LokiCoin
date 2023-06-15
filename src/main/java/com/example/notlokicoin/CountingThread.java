@@ -25,8 +25,4 @@ public class CountingThread extends Thread {
             pause.play();
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> Jasch

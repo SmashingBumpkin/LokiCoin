@@ -18,10 +18,6 @@ public class Miner extends Account{
     public Set<Integer> blockNetworkPositions = new HashSet<>();
     private int lastAddedTransactionPositionInNetwork = 0;
     public static int sleeptime = 10;
-<<<<<<< HEAD
-=======
-    public boolean validatingBlockchainFlag = false;
->>>>>>> Jasch
 
 
     Miner(){
@@ -139,18 +135,8 @@ public class Miner extends Account{
         }
         tempBlock.creditAccount(nextBlock.getRewardRecipient(),Block.blockReward);
         for (Account account : nextBlock.getAccounts().values()){
-<<<<<<< HEAD
             if (account.getBalance() != tempBlock.getAccounts().get(account.getPubKey()).getBalance()){
                 System.out.println(account.getPubKey().hashCode()+" found unexpected balance in block.");
-=======
-            try {
-                if (account.getBalance() != tempBlock.getAccount(account.getPubKey()).getBalance()) {
-                    System.out.println(account.getPubKey().hashCode() + " found unexpected balance in block.");
-                    flag = false;
-                    break;
-                }
-            } catch (NullPointerException e) {
->>>>>>> Jasch
                 flag = false;
                 break;
             }
@@ -161,10 +147,6 @@ public class Miner extends Account{
     public void mineBlock(String data, String previousHash, int blockHeight, int previousBlockPositionInNetwork){
         //Check if the data is valid
         Block newBlock;
-<<<<<<< HEAD
-=======
-        Random R = new Random();
->>>>>>> Jasch
         try {
             newBlock = new Block(data, previousHash, this.getPubKey(), blockHeight, previousBlockPositionInNetwork,
                     localBlockchain.getBlock(blockHeight - 1).getAccounts());
@@ -209,13 +191,7 @@ public class Miner extends Account{
             }
             newBlock.setHash(Miner.calculateBlockHash(newBlock));
             int numberOfBlocksInNetwork = Network.getNumberOfPotentialBlocks();
-<<<<<<< HEAD
             if (this.numberOfBlocksMinerIsAwareOf != numberOfBlocksInNetwork){
-=======
-            int checkNetworkRandom = R.nextInt();
-            if (this.numberOfBlocksMinerIsAwareOf != numberOfBlocksInNetwork
-                && R.nextInt(500) <= 20){
->>>>>>> Jasch
                 validAdd = this.addBlocksFromNetwork(numberOfBlocksInNetwork);
                 this.numberOfBlocksMinerIsAwareOf = numberOfBlocksInNetwork;
                 if (validAdd){
@@ -291,10 +267,6 @@ public class Miner extends Account{
                 }
                 //if all the fork blocks are valid, the chain needs to reshuffle
                 if (validFork){
-<<<<<<< HEAD
-=======
-                    validatingBlockchainFlag = true;
->>>>>>> Jasch
                     System.out.println("Miner "+getPubKey().hashCode()+" found a valid fork and is reshuffling it's blockchain");
                     //remove all blocks from forkPoint onwards
                     List<Integer> networkPositions = localBlockchain.removeBlocksAfterBlockX(forkPoint);
@@ -307,10 +279,6 @@ public class Miner extends Account{
                         Block nextBlock = new Block(Network.getBlock(listOfBlockPositionInNetwork.get(i)));
                         executeBlock(nextBlock);
                     }
-<<<<<<< HEAD
-=======
-                    validatingBlockchainFlag = false;
->>>>>>> Jasch
                     break;
                 }
             } else {
@@ -394,11 +362,4 @@ public class Miner extends Account{
         this.localBlockchain.getLastBlock().printAccounts();
         this.validateBlockchain();
     }
-<<<<<<< HEAD
-=======
-
-    public String getAccounts() {
-        return this.localBlockchain.getLastBlock().getAccountsAsString();
-    }
->>>>>>> Jasch
 }
