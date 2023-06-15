@@ -1,4 +1,4 @@
-package com.example.notlokicoin;
+package com.example.lokicoin;
 
 import javafx.animation.PauseTransition;
 import javafx.beans.property.IntegerProperty;

@@ -4,6 +4,8 @@ module com.example.notlokicoin {
     requires java.desktop;
 
 
-    opens com.example.notlokicoin to javafx.fxml;
-    exports com.example.notlokicoin;
+    opens com.example.lokicoin to javafx.fxml;
+    exports com.example.lokicoin;
+    exports com.example.lokicoin.blockchain;
+    opens com.example.lokicoin.blockchain to javafx.fxml;
 }

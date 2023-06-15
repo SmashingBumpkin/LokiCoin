@@ -1,4 +1,6 @@
-package com.example.notlokicoin;
+package com.example.lokicoin.blockchain;
+
+import com.example.lokicoin.CryptographyReencoding;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -21,7 +23,7 @@ public class Miner extends Account{
     public boolean validatingBlockchainFlag = false;
 
 
-    Miner(){
+    public Miner(){
         super();
         this.localBlockchain = new Blockchain(Miner.prefix);
     }

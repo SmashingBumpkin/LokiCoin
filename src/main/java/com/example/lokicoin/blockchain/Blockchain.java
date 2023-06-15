@@ -1,10 +1,8 @@
-package com.example.notlokicoin;
-import java.security.PublicKey;
+package com.example.lokicoin.blockchain;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 //import static org.junit.Assert.*;
-import java.util.Map;
+
 
 public class Blockchain {
 

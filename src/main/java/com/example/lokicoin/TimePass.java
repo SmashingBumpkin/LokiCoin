@@ -1,4 +1,6 @@
-package com.example.notlokicoin;
+package com.example.lokicoin;
+import com.example.lokicoin.blockchain.Miner;
+
 import java.util.ArrayList;
 
 public class TimePass {

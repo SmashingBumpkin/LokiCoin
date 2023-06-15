@@ -1,4 +1,4 @@
-package com.example.notlokicoin;
+package com.example.lokicoin.blockchain;
 
 import java.util.ArrayList;
 import java.util.List;

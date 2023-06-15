@@ -1,4 +1,4 @@
-package com.example.notlokicoin;
+package com.example.lokicoin;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

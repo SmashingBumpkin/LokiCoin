@@ -1,4 +1,4 @@
-package com.example.notlokicoin;
+package com.example.lokicoin.blockchain;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;

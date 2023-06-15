@@ -1,4 +1,6 @@
-package com.example.notlokicoin;
+package com.example.lokicoin;
+
+import com.example.lokicoin.blockchain.Simulation;
 
 public class Launcher {
     public static void main(String[] args){

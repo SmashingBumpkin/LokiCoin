@@ -1,4 +1,4 @@
-package com.example.notlokicoin;
+package com.example.lokicoin;
 
 import java.security.KeyFactory;
 import java.security.PublicKey;

@@ -1,5 +1,7 @@
-package com.example.notlokicoin;
+package com.example.lokicoin;
 
+import com.example.lokicoin.blockchain.Block;
+import com.example.lokicoin.blockchain.Simulation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
