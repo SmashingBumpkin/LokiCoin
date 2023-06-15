@@ -390,7 +390,7 @@ public class Miner extends Account {
         this.validateBlockchain();
     }
 
-    public String printAccounts2() {
+    public String getAccounts() {
         String y = "";
         for (Account account : this.localBlockchain.getLastBlock().getAccounts().values()) {
             y = y + System.lineSeparator() + (account.returnAccountPrintable());

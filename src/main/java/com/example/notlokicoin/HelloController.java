@@ -161,7 +161,7 @@ public class HelloController {
                 Platform.runLater(() -> blockDetsHash.setText(bDH));
                 String bDPH = "PrevHash: " + notChain.getPreviousHash();
                 Platform.runLater(() -> blockDetsPrevHash.setText(bDPH));
-                Platform.runLater(()->finaldis.setText(simcity.miner1.printAccounts2()));
+                Platform.runLater(()->finaldis.setText(simcity.miner1.getAccounts()));
                 //Block notChain1 = simcity.miner1.localBlockchain.getLastBlock();
                 //String blockDetails1 = notChain1.returnBlockPrintable();
                 if (notChain.getBlockNumber()%3 != 0){
