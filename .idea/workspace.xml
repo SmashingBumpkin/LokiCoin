@@ -4,23 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f06886f6-f59d-4c18-94f9-9a581e8520b4" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Block.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Block.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Blockchain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Blockchain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/CryptographyReencoding.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/CryptographyReencoding.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/HelloController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/LokiTransaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/LokiTransaction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Miner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Miner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Network.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Network.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Simulation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Simulation.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/notlokicoin/Transaction.java" afterDir="false" />
-    </list>
+    <list default="true" id="f06886f6-f59d-4c18-94f9-9a581e8520b4" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
