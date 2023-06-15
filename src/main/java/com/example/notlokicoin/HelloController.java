@@ -115,8 +115,16 @@ public class HelloController {
 
     @FXML
     public void PlayXand0(ActionEvent event) throws IOException {
-        File ticTacToe = new File("/Applications/Tic-Tac-Toe.app");
-        Desktop.getDesktop().open(ticTacToe);
+        //File ticTacToe = new File("/Applications/Tic-Tac-Toe.app");
+        //Desktop.getDesktop().open(ticTacToe);
+
+        Parent root = FXMLLoader.load(getClass().getResource("hello-viewTTT.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        //scene.getStylesheets().add("style.css");
+        stage.setScene(scene);
+        stage.show();
+
     }
 
     @FXML
