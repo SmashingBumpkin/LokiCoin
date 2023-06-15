@@ -61,8 +61,8 @@ public class Simulation {
                 }}});
         makeDrones.start();
 
-//        while (Miner.minersActive){
-        for (int i = 0; i<100; i++){
+        while (Miner.minersActive){
+//        for (int i = 0; i<100; i++){
             try{
                 Thread.sleep(100);
             } catch (Exception e){

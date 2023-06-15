@@ -40,27 +40,27 @@
                   <Image url="@Images/Minecraft.png" />
                </image>
             </ImageView>
-            <Button layoutX="707.0" layoutY="360.0" mnemonicParsing="false" onAction="#ViewCode2" style="-fx-background-color: 000000;" text="View Code " textFill="#0004ff" />
+            <Button layoutX="707.0" layoutY="360.0" mnemonicParsing="false" onAction="#ViewCode" style="-fx-background-color: #ffdab9;" text="View Code " textFill="#0004ff" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="4.0" layoutY="4.0" prefHeight="100.0" prefWidth="800.0" style="-fx-background-color: #2a9d8f;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="4.0" layoutY="4.0" prefHeight="100.0" prefWidth="800.0" style="-fx-background-color: #008b8b;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="LokiCoinimg" fitHeight="100.0" fitWidth="200.0" layoutX="93.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0">
                <image>
                   <Image url="@Images/loki.png" />
                </image>
             </ImageView>
-            <Button layoutX="150.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoHome" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: 000000;" text="Home" textFill="IVORY">
+            <Button layoutX="150.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoHome" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: #008b8b;" text="Home" textFill="IVORY">
                <font>
                   <Font name="Muna Regular" size="24.0" />
                </font>
             </Button>
-            <Button layoutX="340.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoSim" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: 000000;" text="Sim" textFill="IVORY">
+            <Button layoutX="340.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoSim" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: #008b8b;" text="Sim" textFill="IVORY">
                <font>
                   <Font name="Muna Regular" size="24.0" />
                </font>
             </Button>
-            <Button layoutX="530.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoGames" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: 000000;" text="Games" textFill="IVORY">
+            <Button layoutX="530.0" layoutY="25.0" mnemonicParsing="false" onAction="#GoGames" prefHeight="50.0" prefWidth="120.0" style="-fx-background-color: #008b8b;" text="Games" textFill="IVORY">
                <font>
                   <Font name="Muna Regular" size="24.0" />
                </font>

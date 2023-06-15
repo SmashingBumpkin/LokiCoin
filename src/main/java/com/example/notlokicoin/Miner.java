@@ -18,6 +18,7 @@ public class Miner extends Account{
     public Set<Integer> blockNetworkPositions = new HashSet<>();
     private int lastAddedTransactionPositionInNetwork = 0;
     public static int sleeptime = 10;
+    public boolean validatingBlockchainFlag = false;
 
 
     Miner(){
@@ -275,6 +276,7 @@ public class Miner extends Account{
                 }
                 //if all the fork blocks are valid, the chain needs to reshuffle
                 if (validFork){
+                    validatingBlockchainFlag = true;
                     System.out.println("Miner "+getPubKey().hashCode()+" found a valid fork and is reshuffling it's blockchain");
                     //remove all blocks from forkPoint onwards
                     List<Integer> networkPositions = localBlockchain.removeBlocksAfterBlockX(forkPoint);
@@ -287,6 +289,7 @@ public class Miner extends Account{
                         Block nextBlock = new Block(Network.getBlock(listOfBlockPositionInNetwork.get(i)));
                         executeBlock(nextBlock);
                     }
+                    validatingBlockchainFlag = false;
                     break;
                 }
             } else {
@@ -369,5 +372,9 @@ public class Miner extends Account{
     public void printAccounts(){
         this.localBlockchain.getLastBlock().printAccounts();
         this.validateBlockchain();
+    }
+
+    public String getAccounts() {
+        return this.localBlockchain.getLastBlock().getAccountsAsString();
     }
 }

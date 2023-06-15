@@ -9,12 +9,13 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1450.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.notlokicoin.HelloController">
    <children>
-      <AnchorPane layoutX="325.0" layoutY="200.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffdab9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+      <AnchorPane layoutY="100.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #ffdab9;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
          <children>
             <Button fx:id="stopButton" disable="true" layoutX="650.0" layoutY="300.0" mnemonicParsing="false" onAction="#StopClicked" prefHeight="75.0" prefWidth="150.0" style="-fx-background-color: #cd5c5c;" text="Stop" textFill="IVORY" visible="false" AnchorPane.bottomAnchor="220.0">
                <font>
@@ -32,7 +33,7 @@
                   <Font size="11.0" />
                </font>
             </Label>
-            <GridPane layoutX="288.0" layoutY="50.0" prefHeight="250.0" prefWidth="230.0" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="280.0" AnchorPane.topAnchor="50.0">
+            <GridPane layoutX="300.0" layoutY="85.0" prefHeight="250.0" prefWidth="230.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -48,32 +49,32 @@
                <children>
                   <Label alignment="CENTER" prefHeight="40.0" prefWidth="210.0" text="Miner 2" GridPane.rowIndex="1">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="Songti SC Black" size="18.0" />
                      </font>
                   </Label>
                   <Label alignment="CENTER" prefHeight="40.0" prefWidth="210.0" text="Miner 1">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="Songti SC Black" size="18.0" />
                      </font>
                   </Label>
                   <Label alignment="CENTER" prefHeight="40.0" prefWidth="210.0" text="Miner 3" GridPane.rowIndex="2">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="Songti SC Black" size="18.0" />
                      </font>
                   </Label>
                   <Label alignment="CENTER" prefHeight="40.0" prefWidth="210.0" text="Miner 4" GridPane.rowIndex="3">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="Songti SC Black" size="18.0" />
                      </font>
                   </Label>
                   <Label alignment="CENTER" prefHeight="40.0" prefWidth="210.0" text="Miner 5" GridPane.rowIndex="4">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="Songti SC Black" size="18.0" />
                      </font>
                   </Label>
                   <Label alignment="CENTER" prefHeight="40.0" prefWidth="210.0" text="Miner 6" GridPane.rowIndex="5">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="Songti SC Black" size="18.0" />
                      </font>
                   </Label>
                   <Label fx:id="miner1dets" alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="210.0" prefWidth="210.0" wrapText="true" GridPane.columnIndex="1">
@@ -106,41 +107,77 @@
                         <Font name="Apple Braille" size="14.0" />
                      </font>
                   </Label>
+                  <Circle fx:id="miner1green" fill="#1fff53" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" />
+                  <Circle fx:id="miner2green" fill="#1fff53" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Circle fx:id="miner3green" fill="#1fff53" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Circle fx:id="miner4green" fill="#1fff53" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Circle fx:id="miner5green" fill="#1fff53" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Circle fx:id="miner6green" fill="#1fff53" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Circle fx:id="miner1red" fill="#ff2121" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" />
+                  <Circle fx:id="miner2red" fill="#ff2121" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Circle fx:id="miner3red" fill="#ff2121" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Circle fx:id="miner4red" fill="#ff2121" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Circle fx:id="miner5red" fill="#ff2121" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Circle fx:id="miner6red" fill="#ff2121" radius="15.0" stroke="BLACK" strokeType="INSIDE" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                </children>
             </GridPane>
-            <Label fx:id="blockDets" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="38.0" layoutY="55.0" prefHeight="210.0" prefWidth="210.0" wrapText="true" AnchorPane.bottomAnchor="400.0" AnchorPane.leftAnchor="35.0">
+            <Label layoutX="14.0" layoutY="36.0" prefHeight="40.0" prefWidth="259.0" text="Latest Block Mined" AnchorPane.topAnchor="36.0">
                <font>
-                  <Font name="Apple Braille" size="14.0" />
+                  <Font name="Silom" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="87.0" layoutY="36.0" text="Block Mined" AnchorPane.topAnchor="35.0">
+            <Label fx:id="TransactionsLabel" layoutX="679.0" layoutY="42.0" prefHeight="28.0" prefWidth="142.0" text="Transactions" textFill="SADDLEBROWN" visible="false">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font name="Times New Roman Bold" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="647.0" layoutY="35.0" text="Transactions">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <ScrollPane hbarPolicy="NEVER" layoutX="505.0" layoutY="77.0" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #ffdab9;" stylesheets="@style.css" AnchorPane.bottomAnchor="320.0" AnchorPane.leftAnchor="550.0">
+            <ScrollPane fx:id="theScrollThingy" hbarPolicy="NEVER" layoutX="505.0" layoutY="75.0" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #ffdab9;" stylesheets="@style.css" visible="false" AnchorPane.leftAnchor="550.0">
                <content>
-                  <AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #ffdab9;">
+                  <AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: saddlebrown;">
                      <children>
-                        <Text fx:id="transDets" layoutX="-86.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="361.57672119140625" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="69.0" AnchorPane.topAnchor="0.0" />
+                        <Text fx:id="transDets" fill="IVORY" layoutX="-86.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="361.57672119140625" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="69.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="Bai Jamjuree Regular" size="14.0" />
+                           </font>
+                        </Text>
                      </children>
                   </AnchorPane>
                </content>
             </ScrollPane>
-            <Label fx:id="finaldis" alignment="TOP_CENTER" layoutX="47.0" layoutY="481.0" prefHeight="210.0" prefWidth="400.0" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="35.0">
+            <Label fx:id="BalancesLabel" alignment="CENTER" layoutX="127.0" layoutY="360.0" prefHeight="30.0" prefWidth="219.0" text="LC$ Balances $LC" textFill="#00bc32" AnchorPane.leftAnchor="127.0">
                <font>
-                  <Font size="18.0" />
-               </font></Label>
-            <Label layoutX="73.0" layoutY="412.0" text="Balances" AnchorPane.bottomAnchor="300.0" AnchorPane.leftAnchor="35.0">
-               <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font name="Tahoma Bold" size="24.0" />
                </font>
             </Label>
+            <AnchorPane layoutX="16.0" layoutY="85.0" prefHeight="250.0" prefWidth="250.0" style="-fx-background-color: #000000;">
+               <children>
+                  <Label fx:id="blockDets" alignment="TOP_LEFT" contentDisplay="TOP" prefHeight="50.0" prefWidth="250.0" text="Block Number :" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font name="Apple Braille" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="blockDetsHash" alignment="TOP_LEFT" layoutY="50.0" prefHeight="100.0" prefWidth="250.0" text="Hash: " textFill="#00fffb" wrapText="true" />
+                  <Label fx:id="blockDetsPrevHash" alignment="TOP_LEFT" layoutY="150.0" prefHeight="100.0" prefWidth="250.0" text="Prev Hash: " textFill="RED" wrapText="true" />
+               </children>
+            </AnchorPane>
+            <Label layoutX="349.0" layoutY="42.0" text="Verification" textFill="SADDLEBROWN">
+               <font>
+                  <Font name="Monospaced Bold" size="24.0" />
+               </font>
+            </Label>
+            <ScrollPane fx:id="ScrollBalances" hbarPolicy="NEVER" layoutX="36.0" layoutY="388.0" prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #ffdab9;" stylesheets="@style.css">
+               <content>
+                  <AnchorPane prefHeight="300.0" prefWidth="400.0" style="-fx-background-color: #ffdab9;">
+                     <children>
+                        <Text fx:id="finaldis" layoutX="-86.0" layoutY="71.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="361.57672119140625" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="69.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="Bai Jamjuree Regular" size="14.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="83.0" layoutY="7.0" prefHeight="100.0" prefWidth="1450.0" style="-fx-background-color: #008b8b;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -155,12 +192,12 @@
                   <Font size="30.0" />
                </font>
             </Button>
-            <Button layoutX="1026.0" layoutY="19.0" mnemonicParsing="false" onAction="#GoSim" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #008b8b;" text="Simulation" textFill="IVORY" AnchorPane.rightAnchor="250.0">
+            <Button layoutX="1026.0" layoutY="17.0" mnemonicParsing="false" onAction="#GoSim" prefHeight="50.0" prefWidth="200.0" style="-fx-background-color: #008b8b;" text="Simulation" textFill="IVORY" AnchorPane.rightAnchor="250.0">
                <font>
                   <Font size="30.0" />
                </font>
             </Button>
-            <Button layoutX="1256.0" layoutY="17.0" mnemonicParsing="false" onAction="#GoGames" prefHeight="70.0" prefWidth="150.0" style="-fx-background-color: #008b8b;" text="Games" textFill="IVORY" AnchorPane.rightAnchor="50.0">
+            <Button layoutX="1256.0" layoutY="17.0" mnemonicParsing="false" onAction="#GoGames" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #008b8b;" text="Games" textFill="IVORY" AnchorPane.rightAnchor="50.0">
                <font>
                   <Font size="30.0" />
                </font>

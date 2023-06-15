@@ -6,24 +6,23 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Launcher",
+            "name": "Initializer",
             "request": "launch",
-            "mainClass": "com.example.notlokicoin/com.example.notlokicoin.Launcher",
-            "projectName": "NotLokiCoin"
+            "mainClass": "Initializer",
+            "projectName": "LokiCoin_ceffa477"
         },
         {
             "type": "java",
             "name": "Current File",
             "request": "launch",
-            "mainClass": "${file}",
-            "vmArgs": "--module-path C:/Users/Charl/VSCode/JavaFX/javafx-sdk-20.0.1 --add-modules javafx.controls,javafx.fxml"
+            "mainClass": "${file}"
         },
         {
             "type": "java",
-            "name": "HelloApplication",
+            "name": "Initializer",
             "request": "launch",
-            "mainClass": "com.example.notlokicoin/com.example.notlokicoin.HelloApplication",
-            "projectName": "NotLokiCoin"
+            "mainClass": "Initializer",
+            "projectName": "LokiCoin_a43d7e34"
         }
     ]
 }
