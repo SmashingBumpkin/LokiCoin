@@ -21,7 +21,7 @@ public class LokiTransaction extends Transaction {
     }
 
     public LokiTransaction(Transaction tx){
-        super(tx.getSender(), tx.getFee(), tx.getNonce());
+        super(tx.getSender(), tx.getFee(), tx.getNonce(), tx.getHash());
         String data = tx.getData();
         String[] dataAsList = data.split(" ");
         this.amount = Integer.parseInt(dataAsList[0]);

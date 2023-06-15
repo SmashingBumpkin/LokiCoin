@@ -65,3 +65,4 @@ public class Transaction {
         //Adds it to the mempool?
     }
 }
+

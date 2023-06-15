@@ -22,18 +22,34 @@ public class Block {
     //EACH BLOCK SHOULD HOLD THE STATE OF ACCOUNTS AT THAT POINT IT TIME
     //THIS CAN ALLOW A MAJOR REORDER TO BE PROPERLY CHECKED
 
-    public Block(String data, String previousHash, PublicKey rewardRecipient, int blockHeight) {
+    public Block(String data, String previousHash, PublicKey rewardRecipient, int blockHeight,
+                 int previousBlockPositionInNetwork, Map<PublicKey, Account> accounts) {
         this.data = data;
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
         this.blockNumber = blockHeight;
         this.rewardRecipient = rewardRecipient;
+        this.previousBlockPositionInNetwork = previousBlockPositionInNetwork;
+        if (accounts != null) {
+            for (Account account : accounts.values()){
+                this.addAccount(new Account(account));
+            }
+        }
     }
 
-    public Block(String data, String previousHash, PublicKey rewardRecipient, int blockHeight, int previousBlockPositionInNetwork) {
-        this(data, previousHash, rewardRecipient, blockHeight);
-        this.previousBlockPositionInNetwork = previousBlockPositionInNetwork;
+    public Block(Block block) {
+        this(block.getData(), block.getPreviousHash(), block.getRewardRecipient(), block.getBlockNumber(),
+                block.previousBlockPositionInNetwork, block.getAccounts());
+        this.setHash(block.getHash());
+        this.setTimeStamp(block.getTimeStamp());
+
+        this.nonce = block.getNonce(); //used to randomize the block hash
+        this.blockPositionInNetwork = block.getPositionInNetwork();
+        for (Transaction tx : block.getTransactions()){
+            transactions.add(new Transaction(tx));
+        }
     }
+
 
     //Getters & setters
     public String getHash() { return this.hash;}
@@ -47,14 +63,35 @@ public class Block {
     public PublicKey getRewardRecipient(){return this.rewardRecipient;}
     public List<Transaction> getTransactions(){ return this.transactions; }
     public Map<PublicKey, Account> getAccounts(){ return this.accounts; }
-    public Account getAccount(PublicKey pubKey){ return this.accounts.get(pubKey); }
+    public Account getAccount(PublicKey pubKey) {
+        Account account = this.accounts.get(pubKey);
+        if (account != null) {
+            return account;
+        } else {
+            addAccount(new Account(pubKey));
+            return this.accounts.get(pubKey);
+        }
+    }
     public void setNonce(int nonce) { this.nonce = nonce; }
     public void setHash(String hash) { this.hash = hash; }
     public void setTimeStamp(long timeStamp){ this.timeStamp = timeStamp; }
     public void addTransaction(Transaction tx){ this.transactions.add(tx); }
     public void setBlockPositionInNetwork(int blockPositionInNetwork){ this.blockPositionInNetwork = blockPositionInNetwork; }
-    public void setAccounts(Map<PublicKey, Account> accounts) {this.accounts = accounts;}
+    public void setAccounts(Map<PublicKey, Account> inputAccounts) {
+        for (Account inputAccount : inputAccounts.values()){
+            accounts.put(inputAccount.getPubKey(), inputAccount);
+        }
+    }
 
+    public void debitAccount(PublicKey pubKey, Integer debitAmount){
+        getAccount(pubKey).debitBalance(debitAmount);
+    }
+    public void creditAccount(PublicKey pubKey, Integer creditAmount){
+        getAccount(pubKey).creditBalance(creditAmount);
+    }
+    public void setAccountNonce(PublicKey pubKey, Integer nonce){
+        accounts.get(pubKey).setNonce(nonce);
+    }
     public String returnBlockPrintable(){ //I'm pretty sure this should be a function like //def __repr__ in python
         String output = "__________\nBLOCK " + this.blockNumber + "\n\n"
                 + this.data + "\n\n" + "Hash:\n" + this.hash + "\nlast block posn:"
@@ -88,5 +125,18 @@ public class Block {
 
     public void addAccount(Account account) {
         this.accounts.put(account.getPubKey(), account);
+    }
+
+    public void printAccounts(){
+        System.out.println(getAccountsAsString());
+    }
+
+    public String getAccountsAsString() {
+        String output = "";
+        for (Account account : this.getAccounts().values()) {
+            output += account.returnAccountPrintable();
+            output += "\n";
+        }
+        return output;
     }
 }

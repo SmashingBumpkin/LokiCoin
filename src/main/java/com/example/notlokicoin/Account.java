@@ -20,16 +20,10 @@ public class Account extends Thread  {
         this.pubKey = pubKey;
         this.privKey = privKey;
         Network.addAccount(this.pubKey);
-
-
     }
     Account(PublicKey pubKey){
         super();
         this.pubKey = pubKey;
-
-        //if (!Network.NPCs.contains(this)){
-        //    Network.NPCs.add(this);
-        //}
     }
 
     Account(){
@@ -39,8 +33,13 @@ public class Account extends Thread  {
         this.pubKey = keys.getPublic();
         this.privKey = keys.getPrivate();
         Network.addAccount(this.pubKey);
+    }
 
-
+    public Account(Account account) {
+        super();
+        this.balance = account.getBalance(); //Account balance
+        this.pubKey = account.getPubKey(); //address of the account
+        this.nonce = account.getNonce(); //The nonce of the account, must always go up
     }
 
     public int getBalance() { return this.balance; }
@@ -66,8 +65,7 @@ public class Account extends Thread  {
     }
 
     public LokiTransaction generateLokiTransaction(PublicKey recipient, int amount, int fee) {
-        this.nonce++;
-        LokiTransaction lokiTransaction =  new LokiTransaction(this.getPubKey(), fee, this.nonce, recipient, amount);
+        LokiTransaction lokiTransaction =  new LokiTransaction(this.getPubKey(), fee, this.nonce + 1, recipient, amount);
         String txAsString = lokiTransaction.getTxAsString();
 
         MessageDigest messageDigest;
@@ -92,5 +90,9 @@ public class Account extends Thread  {
 
     public String returnAccountPrintable(){
         return "Address " + this.pubKey.hashCode() + " has balance " + this.balance;
+    }
+
+    protected String getAccountPrintable() {
+        return "PubKey hashcode " + pubKey.hashCode() + "\nNonce " + getNonce() + "\nBalance " +getBalance();
     }
 }

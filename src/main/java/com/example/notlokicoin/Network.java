@@ -9,10 +9,10 @@ public class Network extends Thread {
     private static int numberOfPotentialBlocks = 0;
     //all of the transactions that have been submitted and can be mined
     private static List<Transaction> potentialTransactions = new ArrayList<>();
-    public static int numberOfPotentialTransactions = 0;
+    private static int numberOfPotentialTransactions = 0;
 
     private static List<PublicKey> accountPubKeys = new ArrayList<>();
-    public static int numberOfAccounts = 0;
+    private static int numberOfAccounts = 0;
 
     Network(){}
 

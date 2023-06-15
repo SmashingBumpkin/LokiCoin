@@ -149,7 +149,11 @@ public class HelloController {
             simcity.run();
         });
         startsim.start();
-
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         // change stuff on screen thread
         Thread updateLabelThread = new Thread(() -> {
             while (Miner.minersActive == true) {
@@ -190,7 +194,7 @@ public class HelloController {
 
                 // miner3
                 //Block notChain3 = simcity.miner3.localBlockchain.getLastBlock();
-                if (simcity.miner3.flag){
+                if (simcity.miner3.validatingBlockchainFlag){
                     miner3green.setVisible(true);
                     miner3red.setVisible(false);
                 }
@@ -216,7 +220,7 @@ public class HelloController {
 
                 // Miner 5 doing the same shit
                 //Block notChain5 = simcity.miner5.localBlockchain.getLastBlock();
-                if (simcity.miner5.flag){
+                if (simcity.miner5.validatingBlockchainFlag){
                     miner5green.setVisible(true);
                     miner5red.setVisible(false);
                 }
