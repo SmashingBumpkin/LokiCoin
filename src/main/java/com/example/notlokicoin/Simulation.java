@@ -62,7 +62,7 @@ public class Simulation {
                 }}});
         makeDrones.start();
 
-        for (int i=0; i<100; i++){
+        while (Miner.minersActive){
             try{
                 Thread.sleep(100);
             } catch (Exception e){
@@ -70,17 +70,6 @@ public class Simulation {
             Account sender = accArray.get(R.nextInt(accArray.size()));
             Account receiver = accArray.get(R.nextInt(accArray.size()));
             LokiTransaction lokiTx = sender.generateLokiTransaction(receiver.getPubKey(), 1, 0);
-            Transaction tx = lokiTx.lokiToGenericTransaction();
-            Network.addPotentialTransaction(tx);
-        }
-
-
-        for (int i=0; i<20; i++){
-            try{
-                Thread.sleep(100);
-            } catch (Exception e){
-            }
-            LokiTransaction lokiTx = miner1.generateLokiTransaction(miner2.getPubKey(), 50, 1);
             Transaction tx = lokiTx.lokiToGenericTransaction();
             Network.addPotentialTransaction(tx);
         }
@@ -94,31 +83,16 @@ public class Simulation {
         Miner.minersActive = false;
 
         try {
-            miner1.join();
-            miner2.join();
-            miner3.join();
-            miner4.join();
-            miner5.join();
-            miner6.join();
+            for (Miner m : minerArray){m.join();}
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//         miner1.printBlockchain();
-        miner6.printStatus();
-        miner5.printStatus();
-        miner4.printStatus();
-        miner3.printStatus();
-        miner2.printStatus();
-        miner1.printStatus();
+
+        for (Miner m : minerArray){m.printStatus();}
         miner1.validateBlockchain();
         Network.printStatus();
 
         miner1.printAccounts();
-//        miner2.printAccounts();
-//        miner3.printAccounts();
-//        miner4.printAccounts();
-//        miner5.printAccounts();
-//        miner6.printAccounts();
 
         long startTime = System.currentTimeMillis();
 

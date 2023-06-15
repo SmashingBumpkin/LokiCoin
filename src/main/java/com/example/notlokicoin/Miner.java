@@ -136,14 +136,12 @@ public class Miner extends Account{
         tempBlock.creditAccount(nextBlock.getRewardRecipient(),Block.blockReward);
         for (Account account : nextBlock.getAccounts().values()){
             try {
-//                if (account.getBalance() != tempBlock.getAccounts().get(account.getPubKey()).getBalance()) {
                 if (account.getBalance() != tempBlock.getAccount(account.getPubKey()).getBalance()) {
                     System.out.println(account.getPubKey().hashCode() + " found unexpected balance in block.");
                     flag = false;
                     break;
                 }
             } catch (NullPointerException e) {
-                System.out.println("_-----------------------------NULLPOINTER");
                 flag = false;
                 break;
             }
