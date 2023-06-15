@@ -128,8 +128,21 @@ public class Block {
     }
 
     public void printAccounts(){
+<<<<<<< HEAD
         for (Account account : this.getAccounts().values()) {
             System.out.println(account.returnAccountPrintable());
         }
+=======
+        System.out.println(getAccountsAsString());
+    }
+
+    public String getAccountsAsString() {
+        String output = "";
+        for (Account account : this.getAccounts().values()) {
+            output += account.returnAccountPrintable();
+            output += "\n";
+        }
+        return output;
+>>>>>>> Jasch
     }
 }

@@ -1,0 +1,6 @@
+.scroll-pane .scroll-bar {
+    -fx-background-color: #2a9d8f;
+}
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color: #8b4513;
+}
