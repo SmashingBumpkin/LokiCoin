@@ -17,6 +17,7 @@ public class Simulation {
     public List <Account> accArray = new ArrayList<>();
     public void run() {
         //Used to start a new simulation
+        long startTime = System.currentTimeMillis();
         Miner.sleeptime = 10;
 
         //Used to start a new simulation
@@ -78,48 +79,17 @@ public class Simulation {
         }
 
         for (Miner m : minerArray){m.printStatus();}
-        miner1.validateBlockchain();
         Network.printStatus();
-
         miner1.printAccounts();
+        miner6.printAccounts();
+        try{
+            minerArray.get(10).printAccounts();
+        } catch (NullPointerException e) {
+            //no error
+        }
 
-        long startTime = System.currentTimeMillis();
-
-//        for (int i=0; i<4; i++){
-//            //TODO: Andrea
-//            //Accounts/miners get added to network as potential people to do a transaction
-//
-//            //Write a loop that sends a  transaction from one random account to random another
-//            //Keeps looping and adding the transactions
-//            //Add a time so they don't get created TOO quickly
-//
-//            //Relevant classes: Account, Network, Miner, LokiTransacion
-//
-//            LokiTransaction tx = miner1.generateLokiTransaction(miner2.getPubKey(), 199, 5);
-////            System.out.println(tx.getTxPrintable());
-//            try {
-//                if (miner1.checkTxValidity(tx,miner1.localBlockchain.getLastBlock())){
-//                    miner1.executeTransaction(tx,miner1.localBlockchain.getLastBlock());
-//                }
-//            } catch (Exception e) {
-//                System.out.println("Invalid tx");
-//            }
-//        }
-//
-//        for (int i=0; i<5; i++){
-//            LokiTransaction tx = miner2.generateLokiTransaction(miner1.getPubKey(), 19, 5);
-////            System.out.println(tx.getTxPrintable());
-//            try {
-//                if (miner1.checkTxValidity(tx, miner1.localBlockchain.getLastBlock())){
-//                    miner1.executeTransaction(tx, miner1.localBlockchain.getLastBlock());
-//                }
-//            } catch (Exception e) {
-//                System.out.println("Invalid tx");
-//            }
-//        }
-//        miner1.printAccounts();
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
-        System.out.println("The code took " + duration + " milliseconds to execute");
+        System.out.println("The simulation ran for " + duration + " milliseconds");
     }
 }

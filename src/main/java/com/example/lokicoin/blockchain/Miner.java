@@ -200,7 +200,7 @@ public class Miner extends Account{
             newBlock.setHash(Miner.calculateBlockHash(newBlock));
             int numberOfBlocksInNetwork = Network.getNumberOfPotentialBlocks();
             if (this.numberOfBlocksMinerIsAwareOf != numberOfBlocksInNetwork
-                && R.nextInt(50) <= 1){
+                && R.nextInt(70) <= 1){ //chance of miner checking the network for new blocks
                 validAdd = this.addBlocksFromNetwork(numberOfBlocksInNetwork);
                 this.numberOfBlocksMinerIsAwareOf = numberOfBlocksInNetwork;
                 if (validAdd){
@@ -339,15 +339,18 @@ public class Miner extends Account{
     public void validateBlockchain() {
         boolean flag = true;
         int errorBlock = 0;
+        int totalTransactions = 0;
         for (int i = 0; i < this.localBlockchain.blockchain.size(); i++) {
-            flag = this.validateBlock(this.localBlockchain.blockchain.get(i));
+            Block block = this.localBlockchain.blockchain.get(i);
+            totalTransactions += block.getTransactions().size();
+            flag = this.validateBlock(block);
             if (!flag){
                 errorBlock = i;
                 break;
             }
         }
         if (flag){
-            System.out.println("_____\nValid blockchain");
+            System.out.println("_____\nValid blockchain with "+ totalTransactions+" successful transactions");
         } else {
             System.out.println("_____\nERROR: Invalid blockchain. Error in Block " + errorBlock);
         }
@@ -368,8 +371,9 @@ public class Miner extends Account{
     }
 
     public void printAccounts(){
-        this.localBlockchain.getLastBlock().printAccounts();
+        System.out.println("\nMiner "+getPubKey().hashCode() + " reports:");
         this.validateBlockchain();
+        this.localBlockchain.getLastBlock().printAccounts();
     }
 
     public String getAccounts() {

@@ -20,8 +20,6 @@ public class GUILauncher extends Application {
 
     }
 
-
-
     public static void main(String[] args) {
         launch();
     }
