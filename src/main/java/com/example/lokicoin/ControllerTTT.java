@@ -81,7 +81,8 @@ public class ControllerTTT implements Initializable {
         buttons.forEach(button ->{
             setupButton(button);
             button.setFocusTraversable(false);
-
+            Account player1 = new account(),
+            Account player2 = new account(),
         });
     }
 
@@ -109,11 +110,9 @@ public class ControllerTTT implements Initializable {
     public void setPlayerSymbol(Button button){
         if(playerTurn % 2 == 0){
             button.setText("X");
-            Account player1 = new account(),
             playerTurn = 1;
         } else{
             button.setText("O");
-            Account player2 = new account();
             playerTurn = 0;
         }
     }
