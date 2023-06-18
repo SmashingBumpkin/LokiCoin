@@ -243,7 +243,7 @@ public class GUIController {
 
 
                 try {
-                    Thread.sleep(1); // Update every second (adjust as needed)
+                    Thread.sleep(1); // Update every mili second (adjust as needed)
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

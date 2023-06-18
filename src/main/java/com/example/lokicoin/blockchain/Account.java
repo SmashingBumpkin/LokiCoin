@@ -26,7 +26,7 @@ public class Account extends Thread  {
         this.pubKey = pubKey;
     }
 
-    Account(){
+    public Account(){
         super();
         //Returns a new account with automatically generated keys
         KeyPair keys = Account.generateKeyPair();

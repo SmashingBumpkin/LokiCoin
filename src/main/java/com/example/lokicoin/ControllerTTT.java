@@ -1,11 +1,14 @@
 package com.example.lokicoin;
 
+import com.example.lokicoin.blockchain.Account;
 import com.example.lokicoin.blockchain.Block;
 import com.example.lokicoin.blockchain.Simulation;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 import java.net.URL;
@@ -81,8 +84,8 @@ public class ControllerTTT implements Initializable {
         buttons.forEach(button ->{
             setupButton(button);
             button.setFocusTraversable(false);
-            Account player1 = new account(),
-            Account player2 = new account(),
+            Account player1 = new Account();
+            Account player2 = new Account();
         });
     }
 
@@ -106,7 +109,7 @@ public class ControllerTTT implements Initializable {
         });
     }
 
-    }
+
     public void setPlayerSymbol(Button button){
         if(playerTurn % 2 == 0){
             button.setText("X");
@@ -118,8 +121,8 @@ public class ControllerTTT implements Initializable {
     }
     public void getamount(ActionEvent event) {
         try {
-            amount1 = Integer.parseInt(myTextField1.getText());
-            amount2 = Integer.parseInt(myTextField2.getText());
+            String amount1 = String.valueOf(Integer.parseInt(myTextField1.getText()));
+            String amount2 = String.valueOf(Integer.parseInt(myTextField2.getText()));
         }
         catch (NumberFormatException e) {
             mylabel1.setText("Enter a valid amount of LokiCoin");
@@ -142,25 +145,25 @@ public class ControllerTTT implements Initializable {
             };
             
             if (line.equals("XXX")) {
-                winnerText.setText("Player 1 wins:" + amount2 + "LokiCoin");
-                Account player1 = account reciver();
-                Account player2 = account sender();
+                winnerText.setText("Player 1 wins:"); //amount2 + "LokiCoin");
+                //Account player1 = account reciver();
+                //Account player2 = account sender();
             }
             
             else if (line.equals("OOO")) {
-                winnerText.setText("Player 1 wins:" + amount1 + "LokiCoin");
-                Account player1 = account sender();
-                Account player2 = account reciever();
+                winnerText.setText("Player 2 wins:"); //+ amount1 + "LokiCoin");
+                //Account player1 = account sender();
+                //Account player2 = account reciever();
             }
             
         }
     }
-    public void GoHome(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("HomePageNotLokiCoin.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
+    //public void GoHome(ActionEvent event) throws IOException {
+    //    Parent root = FXMLLoader.load(getClass().getResource("HomePageNotLokiCoin.fxml"));
+    //    stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+    //    scene = new Scene(root);
         //scene.getStylesheets().add("style.css");
-        stage.setScene(scene);
-        stage.show();
+     //   stage.setScene(scene);
+      //  stage.show();
 
     }
