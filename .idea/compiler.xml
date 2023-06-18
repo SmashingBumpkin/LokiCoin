@@ -9,5 +9,8 @@
         <module name="NotLokiCoin" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="LokiCoin" target="19" />
+    </bytecodeTargetLevel>
   </component>
 </project>

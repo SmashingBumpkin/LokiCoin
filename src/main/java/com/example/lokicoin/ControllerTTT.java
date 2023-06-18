@@ -46,7 +46,28 @@ public class ControllerTTT implements Initializable {
     private Button button10;
 
     @FXML
+    private Button GoHome;
+
+    @FXML
     private Text winnerText;
+
+    @FXML
+    private TextField myTextField1;
+
+    @FXML
+    private TextField myTextField2;
+
+    @FXML
+    private Button mybutton1;
+
+    @FXML
+    private Button mybutton2;
+
+    @FXML
+    private Label mylabel1;
+
+    @FXML
+    private Label mylabel2;
 
     private int playerTurn = 0;
 
@@ -57,7 +78,6 @@ public class ControllerTTT implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         buttons = new ArrayList<>(Arrays.asList(button1,button2,button3,button4,button5,button6,button7,button8,button9));
-
         buttons.forEach(button ->{
             setupButton(button);
             button.setFocusTraversable(false);
@@ -78,24 +98,36 @@ public class ControllerTTT implements Initializable {
 
     private void setupButton(Button button) {
         button.setOnMouseClicked(mouseEvent -> {
-            Block TTTblock = simcity.miner1.localBlockchain.getLastBlock();
             setPlayerSymbol(button);
             button.setDisable(true);
             checkIfGameIsOver();
-
+            
         });
     }
 
+    }
     public void setPlayerSymbol(Button button){
         if(playerTurn % 2 == 0){
             button.setText("X");
+            Account player1 = new account(),
             playerTurn = 1;
         } else{
             button.setText("O");
+            Account player2 = new account();
             playerTurn = 0;
         }
     }
-
+    public void getamount(ActionEvent event) {
+        try {
+            amount1 = Integer.parseInt(myTextField1.getText());
+            amount2 = Integer.parseInt(myTextField2.getText());
+        }
+        catch (NumberFormatException e) {
+            mylabel1.setText("Enter a valid amount of LokiCoin");
+            mylabel2.setText("Enter a valid amount of LokiCoin");
+        }
+    }
+    
     public void checkIfGameIsOver(){
         for (int a = 0; a < 8; a++) {
             String line = switch (a) {
@@ -109,16 +141,27 @@ public class ControllerTTT implements Initializable {
                 case 7 -> button3.getText() + button6.getText() + button9.getText();
                 default -> null;
             };
-
-            //X winner
+            
             if (line.equals("XXX")) {
-                winnerText.setText("(Player 1 name)!");
+                winnerText.setText("Player 1 wins:" + amount2 + "LokiCoin");
+                Account player1 = account reciver();
+                Account player2 = account sender();
             }
-
-            //O winner
+            
             else if (line.equals("OOO")) {
-                winnerText.setText("(Player 2 name)!");
+                winnerText.setText("Player 1 wins:" + amount1 + "LokiCoin");
+                Account player1 = account sender();
+                Account player2 = account reciever();
             }
+            
         }
     }
-}
+    public void GoHome(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("HomePageNotLokiCoin.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        //scene.getStylesheets().add("style.css");
+        stage.setScene(scene);
+        stage.show();
+
+    }
