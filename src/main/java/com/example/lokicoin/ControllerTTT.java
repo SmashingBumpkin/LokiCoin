@@ -1,8 +1,6 @@
 package com.example.lokicoin;
 
-import com.example.lokicoin.blockchain.Account;
-import com.example.lokicoin.blockchain.Block;
-import com.example.lokicoin.blockchain.Simulation;
+import com.example.lokicoin.blockchain.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,7 +8,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,12 +80,17 @@ public class ControllerTTT implements Initializable {
 
     private Simulation simcity;
     ArrayList<Button> buttons;
+    private int amount2;
+    private int amount1;
+    private Account player1;
 
+    private Account player2;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         buttons = new ArrayList<>(Arrays.asList(button1,button2,button3,button4,button5,button6,button7,button8,button9));
         buttons.forEach(button ->{
+            GoHome.setOnAction(event -> GoBack());
             setupButton(button);
             button.setFocusTraversable(false);
             Account player1 = new Account();
@@ -93,6 +102,8 @@ public class ControllerTTT implements Initializable {
     void restartGame(ActionEvent event) {
         buttons.forEach(this::resetButton);
         winnerText.setText("Tic-Tac-Toe");
+        amount1 = 0;
+        amount2 = 0;
     }
 
     public void resetButton(Button button){
@@ -119,10 +130,11 @@ public class ControllerTTT implements Initializable {
             playerTurn = 0;
         }
     }
-    public void getamount(ActionEvent event) {
+    @FXML
+    public void GetAmount(ActionEvent event) {
         try {
-            String amount1 = String.valueOf(Integer.parseInt(myTextField1.getText()));
-            String amount2 = String.valueOf(Integer.parseInt(myTextField2.getText()));
+             amount1 = Integer.parseInt(myTextField1.getText());
+             amount2 = Integer.parseInt(myTextField2.getText());
         }
         catch (NumberFormatException e) {
             mylabel1.setText("Enter a valid amount of LokiCoin");
@@ -145,25 +157,38 @@ public class ControllerTTT implements Initializable {
             };
             
             if (line.equals("XXX")) {
-                winnerText.setText("Player 1 wins:"); //amount2 + "LokiCoin");
-                //Account player1 = account reciver();
-                //Account player2 = account sender();
+                winnerText.setText("Player 1 wins: " + amount2 + " LokiCoin");
+                Account sender =  player2;
+                Account reciever = player1;
+                LokiTransaction lokiTx = player2.generateLokiTransaction(player1.getPubKey(), amount1, amount2);
+                Transaction tx = lokiTx.lokiToGenericTransaction();
+                Network.addPotentialTransaction(tx);
             }
             
             else if (line.equals("OOO")) {
-                winnerText.setText("Player 2 wins:"); //+ amount1 + "LokiCoin");
-                //Account player1 = account sender();
-                //Account player2 = account reciever();
+                winnerText.setText("Player 2 wins: " + amount1 + " LokiCoin");
+                Account sender =  player1;
+                Account reciever = player2;
+                LokiTransaction lokiTx = player1.generateLokiTransaction(player2.getPubKey(), amount1, amount2);
+                Transaction tx = lokiTx.lokiToGenericTransaction();
+                Network.addPotentialTransaction(tx);
             }
-            
+
         }
     }
-    //public void GoHome(ActionEvent event) throws IOException {
-    //    Parent root = FXMLLoader.load(getClass().getResource("HomePageNotLokiCoin.fxml"));
-    //    stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-    //    scene = new Scene(root);
-        //scene.getStylesheets().add("style.css");
-     //   stage.setScene(scene);
-      //  stage.show();
+    private void GoBack() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("HomePageNotLokiCoin.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            Stage stage = (Stage) GoHome.getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     }
