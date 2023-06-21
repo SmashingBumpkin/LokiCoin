@@ -31,6 +31,15 @@ public class Miner extends Account{
         this.localBlockchain = new Blockchain(Miner.prefix);
     }
 
+    //Initializer to start a network for the first time
+    public static Miner startNewNetwork(int difficulty) {
+        Miner.setPrefix(1);
+        Miner miner = new Miner();
+        miner.mineBlock("The OG miner was 'ere", Miner.getPrefixString(), 0,-1);
+        Miner.setPrefix(difficulty);
+        return miner;
+    }
+
     public static String getPrefixString(){ return Miner.prefixString; }
 
     public static void setPrefix(int difficulty){
@@ -150,6 +159,31 @@ public class Miner extends Account{
         return flag;
     }
 
+    public void executeBlock(Block block){
+        this.localBlockchain.addNewBlock(new Block(block));
+        this.blockNetworkPositions.add(block.getPositionInNetwork());
+    }
+
+    public void validateBlockchain() {
+        boolean flag = true;
+        int errorBlock = 0;
+        int totalTransactions = 0;
+        for (int i = 0; i < this.localBlockchain.blockchain.size(); i++) {
+            Block block = this.localBlockchain.blockchain.get(i);
+            totalTransactions += block.getTransactions().size();
+            flag = this.validateBlock(block);
+            if (!flag){
+                errorBlock = i;
+                break;
+            }
+        }
+        if (flag){
+            System.out.println("_____\nValid blockchain of height "+ localBlockchain.getBlockchainHeight() + " with "+ totalTransactions+" successful transactions");
+        } else {
+            System.out.println("_____\nERROR: Invalid blockchain. Error in Block " + errorBlock);
+        }
+    }
+
     public void mineBlock(String data, String previousHash, int blockHeight, int previousBlockPositionInNetwork){
         //Check if the data is valid
         Block newBlock;
@@ -188,7 +222,8 @@ public class Miner extends Account{
         //The difficulty is the number of "0"s at the start of the hash.
         boolean validAdd = false;
         int nextNetworkCheck = R.nextInt(50);
-        while (!newBlock.getHash().substring(0, Miner.prefix).equals(difficultyString)) {
+        while (!newBlock.getHash().substring(0, Miner.prefix).equals(difficultyString)
+                && minersActive) {
             newBlock.setNonce(newBlock.getNonce()+1); //iterates nonce to force the hash to change
             //Nerfed mining algorithm, stops it from just wasting CPU power/levels playing field
             newBlock.setTimeStamp(new Date().getTime());
@@ -209,7 +244,7 @@ public class Miner extends Account{
             }
         }
 
-        if (!validAdd) {
+        if (!validAdd && minersActive) {
             newBlock.creditAccount(this.getPubKey(),Block.blockReward);
             newBlock.setBlockPositionInNetwork(Network.addPotentialBlock(new Block(newBlock)));
             this.executeBlock(newBlock);
@@ -319,40 +354,6 @@ public class Miner extends Account{
                     this.localBlockchain.getBlockchainHeight(),
                     this.localBlockchain.getLastBlock().getPositionInNetwork()
             );
-        }
-    }
-
-    //Initializer to start a network for the first time
-    public static Miner startNewNetwork(int difficulty) {
-        Miner.setPrefix(1);
-        Miner miner = new Miner();
-        miner.mineBlock("The OG miner was 'ere", Miner.getPrefixString(), 0,-1);
-        Miner.setPrefix(difficulty);
-        return miner;
-    }
-
-    public void executeBlock(Block block){
-        this.localBlockchain.addNewBlock(new Block(block));
-        this.blockNetworkPositions.add(block.getPositionInNetwork());
-    }
-
-    public void validateBlockchain() {
-        boolean flag = true;
-        int errorBlock = 0;
-        int totalTransactions = 0;
-        for (int i = 0; i < this.localBlockchain.blockchain.size(); i++) {
-            Block block = this.localBlockchain.blockchain.get(i);
-            totalTransactions += block.getTransactions().size();
-            flag = this.validateBlock(block);
-            if (!flag){
-                errorBlock = i;
-                break;
-            }
-        }
-        if (flag){
-            System.out.println("_____\nValid blockchain with "+ totalTransactions+" successful transactions");
-        } else {
-            System.out.println("_____\nERROR: Invalid blockchain. Error in Block " + errorBlock);
         }
     }
 
