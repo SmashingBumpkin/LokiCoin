@@ -84,7 +84,7 @@ public class Simulation {
         miner6.printAccounts();
         try{
             minerArray.get(10).printAccounts();
-        } catch (NullPointerException e) {
+        } catch (IndexOutOfBoundsException e) {
             //no error
         }
 
