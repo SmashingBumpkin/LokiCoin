@@ -82,6 +82,7 @@ public class Simulation {
         Network.printStatus();
         miner1.printAccounts();
         miner6.printAccounts();
+        miner6.printBlockchain();
         try{
             minerArray.get(10).printAccounts();
         } catch (IndexOutOfBoundsException e) {
